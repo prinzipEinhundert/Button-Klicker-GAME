@@ -1,1719 +1,1199 @@
 <!DOCTYPE html>
 <html lang="de">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Brigitte Murr | Luminaris | Coaching mit Spirit</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=Nunito:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    fontFamily: {
-                        'display': ['Cormorant Garamond', 'serif'],
-                        'body': ['Nunito', 'sans-serif'],
-                    }
-                }
-            }
-        }
-    </script>
-
-    <style>
-        :root {
-            --bg-primary: #FFFFFF;
-            --bg-soft-yellow: #FEF9E7;
-            --bg-soft-blue: #EBF5FB;
-            --bg-soft-turquoise: #E8F6F3;
-            --accent-turquoise: #48C9B0;
-            --accent-blue: #5DADE2;
-            --accent-yellow: #F7DC6F;
-            --shadow-color: rgba(26, 188, 156, 0.2);
-            --shadow-hover: rgba(0, 0, 0, 0.25);
-            --text-primary: #2C3E50;
-            --text-muted: #7F8C8D;
-            --border-light: #E5E7EB;
-            --gradient-gold: linear-gradient(135deg, #D4AF37, #F4E4BA, #C9A227, #F4E4BA, #D4AF37);
-
-            /* Accessibility Variables */
-            --font-size-base: 16px;
-            --line-height-base: 1.6;
-        }
-
-        /* High Contrast Mode */
-        body.high-contrast {
-            --bg-primary: #000000;
-            --bg-soft-yellow: #1a1a00;
-            --bg-soft-blue: #001a1a;
-            --bg-soft-turquoise: #001a0d;
-            --text-primary: #FFFFFF;
-            --text-muted: #CCCCCC;
-            --border-light: #FFFFFF;
-            --shadow-color: rgba(255, 255, 255, 0.3);
-        }
-
-        body.high-contrast .news-ticker {
-            background: #FFFFFF;
-        }
-        body.high-contrast .news-ticker-content span {
-            color: #000000;
-        }
-        body.high-contrast .card,
-        body.high-contrast .bg-white {
-            background: #000000 !important;
-            border-color: #FFFFFF !important;
-        }
-
-        /* Large Text Mode */
-        body.large-text {
-            --font-size-base: 20px;
-            --line-height-base: 1.8;
-        }
-
-        /* Easy Language Mode */
-        body.easy-language .complex-text {
-            display: none;
-        }
-        body.easy-language .easy-text {
-            display: block !important;
-        }
-
-        * {
-            box-sizing: border-box;
-        }
-
-        html {
-            scroll-behavior: smooth;
-            font-size: var(--font-size-base);
-        }
-
-        body {
-            font-family: 'Nunito', sans-serif;
-            color: var(--text-primary);
-            background: linear-gradient(180deg, var(--bg-soft-yellow) 0%, var(--bg-primary) 30%, var(--bg-soft-blue) 70%, var(--bg-soft-turquoise) 100%);
-            background-attachment: fixed;
-            overflow-x: hidden;
-            line-height: var(--line-height-base);
-            transition: font-size 0.3s ease;
-        }
-
-        span {
-            line-height: 1.2 !important;
-        }
-
-        .easy-text {
-            display: none;
-        }
-
-        /* Typography */
-        .font-display {
-            font-family: 'Cormorant Garamond', serif;
-        }
-
-        /* Accessibility Toolbar */
-        .a11y-toolbar {
-            position: fixed;
-            top: 80px;
-            right: 16px;
-            z-index: 1000;
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-        }
-
-        @media (max-width: 768px) {
-            .a11y-toolbar {
-                top: auto;
-                bottom: 20px;
-                right: 16px;
-                flex-direction: row;
-            }
-        }
-
-        .a11y-btn {
-            width: 44px;
-            height: 44px;
-            border-radius: 50%;
-            background: #FFFFFF;
-            border: 2px solid var(--border-light);
-            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            color: var(--text-primary);
-        }
-
-        .a11y-btn:hover, .a11y-btn.active {
-            background: var(--accent-turquoise);
-            border-color: var(--accent-turquoise);
-            color: #FFFFFF;
-            transform: scale(1.1);
-        }
-
-        .a11y-btn:focus {
-            outline: 3px solid var(--accent-blue);
-            outline-offset: 2px;
-        }
-
-        .a11y-btn svg {
-            width: 20px;
-            height: 20px;
-        }
-
-        .a11y-btn[aria-pressed="true"] {
-            background: var(--accent-turquoise);
-            border-color: var(--accent-turquoise);
-            color: #FFFFFF;
-        }
-
-        /* News Ticker */
-        .news-ticker {
-            background: linear-gradient(90deg, var(--accent-turquoise) 0%, var(--accent-blue) 100%);
-            height: 24px;
-            overflow: hidden;
-            position: relative;
-            padding: .3rem 0px;
-        }
-
-        .news-ticker-content {
-            display: flex;
-            animation: ticker 40s linear infinite;
-            white-space: nowrap;
-        }
-
-        .news-ticker-content span {
-            color: white;
-            font-size: 13px;
-            font-weight: 500;
-            padding: 0 50px;
-            letter-spacing: 0.3px;
-        }
-
-        @keyframes ticker {
-            0% { transform: translateX(0); }
-            100% { transform: translateX(-50%); }
-        }
-
-        @media (prefers-reduced-motion: reduce) {
-            .news-ticker-content {
-                animation: none;
-            }
-        }
-
-        /* Navigation */
-        .nav-container {
-            position: sticky;
-            top: 0;
-            z-index: 100;
-            background: rgba(255,255,255,0.95);
-            backdrop-filter: blur(8px);
-            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
-        }
-
-        .nav-link {
-            position: relative;
-            color: var(--text-primary);
-            font-weight: 500;
-            padding: 10px 18px;
-            transition: color 0.3s ease;
-            text-decoration: none;
-        }
-
-        .nav-link::after {
-            content: '';
-            position: absolute;
-            bottom: 4px;
-            left: 50%;
-            width: 0;
-            height: 2px;
-            background: linear-gradient(90deg, var(--accent-turquoise), var(--accent-blue));
-            transition: width 0.3s ease, left 0.3s ease;
-        }
-
-        .nav-link:hover, .nav-link:focus {
-            color: var(--accent-turquoise);
-        }
-
-        .nav-link:hover::after, .nav-link:focus::after {
-            width: 70%;
-            left: 15%;
-        }
-
-        .nav-link:focus {
-            outline: 2px solid var(--accent-blue);
-            outline-offset: 4px;
-            border-radius: 4px;
-        }
-
-        /* Mobile Menu */
-        .mobile-menu-btn {
-            width: 44px;
-            height: 44px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background: transparent;
-            border: none;
-            cursor: pointer;
-            padding: 8px;
-        }
-
-        .mobile-menu-btn:focus {
-            outline: 2px solid var(--accent-blue);
-            outline-offset: 2px;
-            border-radius: 8px;
-        }
-
-        .hamburger {
-            width: 24px;
-            height: 18px;
-            position: relative;
-        }
-
-        .hamburger span {
-            display: block;
-            position: absolute;
-            height: 2px;
-            width: 100%;
-            background: var(--text-primary);
-            border-radius: 2px;
-            transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-
-        .hamburger span:nth-child(1) { top: 0; }
-        .hamburger span:nth-child(2) { top: 8px; }
-        .hamburger span:nth-child(3) { top: 16px; }
-
-        .mobile-menu-btn[aria-expanded="true"] .hamburger span:nth-child(1) {
-            top: 8px;
-            transform: rotate(45deg);
-        }
-
-        .mobile-menu-btn[aria-expanded="true"] .hamburger span:nth-child(2) {
-            opacity: 0;
-            transform: translateX(-10px);
-        }
-
-        .mobile-menu-btn[aria-expanded="true"] .hamburger span:nth-child(3) {
-            top: 8px;
-            transform: rotate(-45deg);
-        }
-
-        .mobile-nav {
-            position: absolute;
-            top: 100%;
-            left: 0;
-            right: 0;
-            background: rgba(255,255,255,0.98);
-            backdrop-filter: blur(10px);
-            padding: 0;
-            max-height: 0;
-            overflow: hidden;
-            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
-        }
-
-        .mobile-nav.open {
-            max-height: 400px;
-            padding: 16px 24px;
-        }
-
-        .mobile-nav a {
-            display: block;
-            padding: 14px 0;
-            color: var(--text-primary);
-            font-weight: 500;
-            text-decoration: none;
-            border-bottom: 1px solid var(--border-light);
-            transition: color 0.2s ease, padding-left 0.2s ease;
-        }
-
-        .mobile-nav a:hover, .mobile-nav a:focus {
-            color: var(--accent-turquoise);
-            padding-left: 8px;
-        }
-
-        .mobile-nav a:last-child {
-            border-bottom: none;
-        }
-
-        /* Button Styles */
-        .btn-primary {
-            background: #FFFFFF;
-            border: 1px solid var(--border-light);
-            border-radius: 12px;
-            padding: 12px 28px;
-            font-weight: 600;
-            color: var(--text-primary);
-            box-shadow: 0 8px 12px var(--shadow-color);
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            cursor: pointer;
-            display: inline-block;
-            text-decoration: none;
-            font-size: inherit;
-        }
-
-        .btn-primary:hover {
-            box-shadow: 0 12px 18px var(--shadow-hover);
-            transform: translateY(-2px);
-        }
-
-        .btn-primary:focus {
-            outline: 3px solid var(--accent-blue);
-            outline-offset: 2px;
-        }
-
-        /* Card Styles */
-        .card {
-            background: var(--bg-primary);
-            border-radius: 20px;
-            box-shadow: 0 8px 12px var(--shadow-color);
-            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-            overflow: hidden;
-        }
-
-        .card:hover {
-            transform: translateY(-8px);
-            box-shadow: 0 12px 20px var(--shadow-color);
-        }
-
-        /* Gold Shimmer Effect */
-        .gold-shimmer {
-            background: var(--gradient-gold);
-            background-size: 200% auto;
-            -webkit-background-clip: text;
-            background-clip: text;
-            -webkit-text-fill-color: transparent;
-            filter: drop-shadow(0 2px 4px rgba(212, 175, 55, 0.3));
-            animation: shimmer 9s ease-in-out infinite;
-        }
-
-        @keyframes shimmer {
-            0%, 100% { background-position: 0% center; }
-            50% { background-position: 100% center; }
-        }
-
-        /* Entrance Animations */
-        .fade-in {
-            opacity: 0;
-            transform: translateY(30px);
-            transition: opacity 0.8s ease, transform 0.8s ease;
-        }
-
-        .fade-in.visible {
-            opacity: 1;
-            transform: translateY(0);
-        }
-
-        .slide-in-left {
-            opacity: 0;
-            transform: translateX(-50px);
-            transition: opacity 0.8s ease, transform 0.8s ease;
-        }
-
-        .slide-in-left.visible {
-            opacity: 1;
-            transform: translateX(0);
-        }
-
-        .slide-in-right {
-            opacity: 0;
-            transform: translateX(50px);
-            transition: opacity 0.8s ease, transform 0.8s ease;
-        }
-
-        .slide-in-right.visible {
-            opacity: 1;
-            transform: translateX(0);
-        }
-
-        /* Slider Section */
-        .slider-section {
-            padding: 20px;
-            margin: 0 -20px;
-        }
-
-        @media (min-width: 769px) {
-            .slider-section {
-                padding: 20px 60px;
-                margin: 0;
-            }
-        }
-
-        .slider-container {
-            overflow: hidden;
-            padding: 20px 10px;
-        }
-
-        .slider-track {
-            display: flex;
-            gap: 20px;
-            transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-
-        /* Filter Tabs - Integrated Design */
-        .filter-section {
-            text-align: center;
-            margin-bottom: 40px;
-        }
-
-        .filter-intro {
-            font-size: 15px;
-            color: var(--text-muted);
-            margin-bottom: 16px;
-        }
-
-        .filter-tabs {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            gap: 8px;
-            max-width: 700px;
-            margin: 0 auto;
-        }
-
-        .filter-tab {
-            padding: 10px 20px;
-            background: transparent;
-            border: 1px solid var(--border-light);
-            border-radius: 25px;
-            font-size: 14px;
-            font-weight: 500;
-            color: var(--text-muted);
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-
-        .filter-tab:hover {
-            border-color: var(--accent-turquoise);
-            color: var(--accent-turquoise);
-        }
-
-        .filter-tab.active {
-            background: linear-gradient(135deg, var(--accent-turquoise), var(--accent-blue));
-            border-color: transparent;
-            color: #FFFFFF;
-            box-shadow: 0 4px 12px rgba(72, 201, 176, 0.3);
-        }
-
-        .filter-tab:focus {
-            outline: 3px solid var(--accent-blue);
-            outline-offset: 2px;
-        }
-
-        /* Slider Navigation */
-        .slider-nav-btn {
-            position: absolute;
-            top: 50%;
-            transform: translateY(-50%);
-            width: 48px;
-            height: 48px;
-            border-radius: 50%;
-            background: var(--bg-primary);
-            border: 1px solid var(--border-light);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            box-shadow: 0 4px 12px var(--shadow-color);
-            transition: all 0.3s ease;
-            z-index: 10;
-            color: var(--text-primary);
-        }
-
-        .slider-nav-btn:hover {
-            box-shadow: 0 8px 20px var(--shadow-hover);
-            transform: translateY(-50%) scale(1.05);
-        }
-
-        .slider-nav-btn:focus {
-            outline: 3px solid var(--accent-blue);
-            outline-offset: 2px;
-        }
-
-        .slider-nav-btn.prev {
-            left: 0;
-        }
-
-        .slider-nav-btn.next {
-            right: 0;
-        }
-
-        @media (max-width: 768px) {
-            .slider-nav-btn {
-                width: 40px;
-                height: 40px;
-            }
-        }
-
-        /* FAQ Accordion */
-        .faq-item {
-            border-bottom: 1px solid var(--border-light);
-        }
-
-        .faq-question {
-            cursor: pointer;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 20px 0;
-            border-radius: 12px;
-            margin: 5px;
-            transition: color 0.3s ease;
-            background: transparent;
-            border: none;
-            width: 100%;
-            text-align: left;
-            font-size: inherit;
-            font-family: inherit;
-        }
-
-        .faq-question:hover, .faq-question:focus {
-            color: var(--accent-turquoise);
-        }
-
-        .faq-question:focus {
-            outline: 2px solid var(--accent-blue);
-            outline-offset: 4px;
-        }
-
-        .faq-icon {
-            transition: transform 0.3s ease;
-            flex-shrink: 0;
-            margin-left: 16px;
-        }
-
-        .faq-item.active .faq-icon {
-            transform: rotate(180deg);
-        }
-
-        .faq-answer {
-            max-height: 0;
-            overflow: hidden;
-            transition: max-height 0.4s ease, padding 0.4s ease;
-        }
-
-        .faq-item.active .faq-answer {
-            max-height: 500px;
-            padding-bottom: 20px;
-        }
-
-        /* Form Inputs */
-        .form-input {
-            width: 100%;
-            padding: 14px 18px;
-            border: 1px solid var(--border-light);
-            border-radius: 8px;
-            font-family: 'Nunito', sans-serif;
-            font-size: 16px;
-            transition: border-color 0.3s ease, box-shadow 0.3s ease;
-            background: var(--bg-primary);
-            color: var(--text-primary);
-        }
-
-        .form-input:focus {
-            outline: none;
-            border-color: var(--accent-turquoise);
-            box-shadow: 0 0 0 3px rgba(72, 201, 176, 0.15);
-        }
-
-        .form-input::placeholder {
-            color: var(--text-muted);
-        }
-
-        /* Quote styling */
-        .quote-mark {
-            font-family: 'Cormorant Garamond', serif;
-            font-size: 4rem;
-            line-height: 1;
-            color: var(--accent-turquoise);
-            opacity: 0.5;
-        }
-
-        /* Skip Link */
-        .skip-link {
-            position: absolute;
-            top: -100px;
-            left: 50%;
-            transform: translateX(-50%);
-            background: var(--accent-turquoise);
-            color: white;
-            padding: 12px 24px;
-            border-radius: 8px;
-            font-weight: 600;
-            z-index: 9999;
-            transition: top 0.3s ease;
-        }
-
-        .skip-link:focus {
-            top: 10px;
-            outline: 2px solid white;
-            outline-offset: 2px;
-        }
-
-        .logo-class {
-            max-width: 30%;
-            margin: 0 auto;
-        }
-
-        /* ============================================
-           IMAGE STACK EFFECT (About Section)
-           ============================================ */
-        .image-stack {
-            position: relative;
-            width: 100%;
-            /* Festes 5:3 Seitenverhältnis */
-            aspect-ratio: 5 / 3;
-        }
-
-        .stack-img {
-            position: absolute;
-            inset: 0;
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            border-radius: 1.5rem; /* rounded-3xl */
-            transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
-            box-shadow: 0 10px 15px var(--shadow-color);
-            background-color: white;
-            padding: 2px;
-        }
-
-        /* --- Standard Zustand --- */
-        /* Vorderes Bild */
-        .stack-front {
-            z-index: 2;
-            transform: translateX(0) scale(1);
-        }
-
-        /* Hinteres Bild */
-        .stack-back {
-            z-index: 1;
-            transform: translate(-8%, 10%) scale(0.95);
-            filter: brightness(0.9);
-            filter: blur(5px);
-        }
-
-        /* --- Hover Effekt --- */
-        /* Hinteres Bild kommt weiter heraus */
-        .image-stack:hover .stack-back {
-            transform: translate(-15%, 10%) scale(0.95);
-        }
-
-        /* --- Swapped Zustand (Klasse wird per JS getoggelt) --- */
-        /* Vorderes Bild geht nach hinten */
-        .image-stack.is-swapped .stack-front {
-            z-index: 1;
-            transform: translate(-8%, 10%) scale(0.95);
-            filter: brightness(0.9);
-            filter: blur(5px);
-        }
-
-        /* Hinteres Bild kommt nach vorne */
-        .image-stack.is-swapped .stack-back {
-            z-index: 2;
-            transform: translateX(0) scale(1);
-            filter: brightness(1);
-            filter: blur(0px);
-        }
-
-        /* Hover bleibt erhalten, aber auf das nun hintere Bild angewendet */
-        .image-stack.is-swapped:hover .stack-front {
-             transform: translate(-15%, 10%) scale(0.95);
-        }
-
-        /* Focus Styles für Tastatur */
-        .image-stack:focus { outline: none; }
-        .image-stack:focus-visible {
-            outline: 3px solid var(--accent-turquoise);
-            outline-offset: 4px;
-            border-radius: 1.5rem;
-        }
-
-        @media (max-width: 768px) {
-            .logo-class {
-                max-width: 80%;
-            }
-        }
-
-        /* Reduced motion */
-        @media (prefers-reduced-motion: reduce) {
-            *, *::before, *::after {
-                animation-duration: 0.01ms !important;
-                animation-iteration-count: 1 !important;
-                transition-duration: 0.01ms !important;
-            }
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>HTML Text Editor</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #0a0a0f;
+      --bg-secondary: #12121a;
+      --fg: #e8e8ed;
+      --fg-muted: #6b6b7b;
+      --accent: #00d4aa;
+      --accent-glow: rgba(0, 212, 170, 0.3);
+      --accent-secondary: #ff7b54;
+      --accent-secondary-glow: rgba(255, 123, 84, 0.3);
+      --accent-js: #ffd700;
+      --accent-js-glow: rgba(255, 215, 0, 0.2);
+      --card: rgba(24, 24, 32, 0.8);
+      --border: rgba(255, 255, 255, 0.08);
+      /* Group Colors */
+      --group-color-1: #00d4aa;
+      --group-color-2: #ff7b54;
+      --group-color-3: #ffd700;
+      --group-color-4: #a78bfa;
+      --group-color-5: #38bdf8;
+    }
+
+    [data-theme="light"] {
+      --bg: #f4f4f8;
+      --bg-secondary: #ffffff;
+      --fg: #1a1a2e;
+      --fg-muted: #6b6b7b;
+      --accent: #00a88a;
+      --accent-glow: rgba(0, 168, 138, 0.2);
+      --accent-secondary: #e85a3c;
+      --accent-secondary-glow: rgba(232, 90, 60, 0.2);
+      --accent-js: #d4a900;
+      --accent-js-glow: rgba(212, 169, 0, 0.2);
+      --card: rgba(255, 255, 255, 0.9);
+      --border: rgba(0, 0, 0, 0.08);
+      --group-color-1: #00a88a;
+      --group-color-2: #e85a3c;
+      --group-color-3: #d4a900;
+      --group-color-4: #8b5cf6;
+      --group-color-5: #0ea5e9;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      font-family: 'Space Grotesk', sans-serif;
+      background: var(--bg);
+      color: var(--fg);
+      min-height: 100vh;
+      transition: background 0.4s ease, color 0.4s ease;
+    }
+
+    .mono { font-family: 'JetBrains Mono', monospace; }
+
+    .bg-pattern {
+      position: fixed; inset: 0; z-index: -1;
+      background:
+        radial-gradient(ellipse 80% 50% at 20% 20%, var(--accent-glow) 0%, transparent 50%),
+        radial-gradient(ellipse 60% 40% at 80% 80%, var(--accent-secondary-glow) 0%, transparent 50%),
+        var(--bg);
+    }
+
+    .bg-grid {
+      position: fixed; inset: 0; z-index: -1;
+      background-image:
+        linear-gradient(var(--border) 1px, transparent 1px),
+        linear-gradient(90deg, var(--border) 1px, transparent 1px);
+      background-size: 60px 60px;
+      opacity: 0.5;
+    }
+
+    .glass-card {
+      background: var(--card);
+      backdrop-filter: blur(20px);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      transition: all 0.3s ease;
+    }
+
+    .code-editor {
+      background: var(--bg-secondary);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      resize: vertical; /* Allow resize */
+      transition: all 0.3s ease;
+    }
+
+    .code-editor:focus {
+      outline: none;
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px var(--accent-glow);
+    }
+
+    /* Script Item Styling */
+    .script-item {
+      background: var(--bg-secondary);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      transition: all 0.3s ease;
+      animation: slideIn 0.4s ease backwards;
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* The colored bar on the left */
+    .script-item::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 0;
+      bottom: 0;
+      width: 4px;
+      background: var(--item-color, var(--border));
+      transition: background 0.3s ease;
+    }
+
+    .script-item:focus-within {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px var(--accent-glow);
+    }
+
+    .script-item textarea {
+      background: transparent;
+      border: none;
+      color: var(--fg);
+      width: 100%;
+      padding: 12px 0; /* Adjusted padding */
+      font-size: 14px;
+      line-height: 1.5;
+      resize: vertical; /* Free vertical resize */
+      min-height: 60px; /* Approx 3 lines */
+      transition: all 0.2s ease;
+    }
+
+    .script-item textarea:focus { outline: none; }
+
+    .text-item {
+      background: var(--bg-secondary);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      transition: all 0.3s ease;
+      animation: slideIn 0.4s ease backwards;
+    }
+
+    .text-item:focus-within {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px var(--accent-glow);
+    }
+
+    .text-item textarea {
+      background: transparent;
+      border: none;
+      color: var(--fg);
+      width: 100%;
+      padding: 12px 0;
+      font-size: 14px;
+      line-height: 1.6;
+      resize: vertical;
+      overflow: hidden;
+      min-height: 44px;
+      transition: all 0.2s ease;
+    }
+
+    .text-item textarea:focus { outline: none; }
+
+    .url-item {
+      background: var(--bg-secondary);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      transition: all 0.3s ease;
+      animation: slideIn 0.4s ease backwards;
+    }
+
+    .url-item:focus-within {
+      border-color: var(--accent-secondary);
+      box-shadow: 0 0 0 3px var(--accent-secondary-glow);
+    }
+
+    .url-item input {
+      background: transparent;
+      border: none;
+      color: var(--fg);
+      width: 100%;
+      padding: 8px 0;
+      font-size: 13px;
+      transition: all 0.2s ease;
+    }
+
+    .url-item input:focus {
+      outline: none;
+      background: rgba(255, 123, 84, 0.05);
+      padding-left: 8px;
+      margin-left: -8px;
+      border-radius: 4px;
+    }
+
+    .tag-badge {
+      background: linear-gradient(135deg, var(--accent), #00a88a);
+      color: #000;
+      font-size: 10px;
+      font-weight: 600;
+      padding: 3px 10px;
+      border-radius: 20px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .tag-badge.js-badge {
+      background: linear-gradient(135deg, var(--accent-js), #ffaa00);
+      color: #1a1a2e;
+      text-transform: none;
+    }
+
+    /* Badge for Static Keys */
+    .key-badge {
+      background: var(--bg);
+      color: var(--fg-muted);
+      font-size: 11px;
+      font-weight: 600;
+      padding: 4px 8px;
+      border-radius: 6px;
+      font-family: 'JetBrains Mono', monospace;
+      border: 1px solid var(--border);
+      white-space: nowrap;
+    }
+
+    .url-badge {
+      background: linear-gradient(135deg, var(--accent-secondary), #ff5733);
+      color: #fff;
+      font-size: 10px;
+      font-weight: 600;
+      padding: 3px 10px;
+      border-radius: 20px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .attr-badge {
+      background: var(--bg);
+      color: var(--fg-muted);
+      font-size: 9px;
+      font-weight: 500;
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-family: 'JetBrains Mono', monospace;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, var(--accent), #00b896);
+      color: #000;
+      font-weight: 600;
+      padding: 12px 24px;
+      border-radius: 10px;
+      border: none;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .btn-primary::before {
+      content: ''; position: absolute; inset: 0;
+      background: linear-gradient(135deg, rgba(255,255,255,0.2), transparent);
+      opacity: 0; transition: opacity 0.3s ease;
+    }
+
+    .btn-primary:hover::before { opacity: 1; }
+    .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 24px var(--accent-glow); }
+    .btn-primary:active { transform: translateY(0); }
+
+    .btn-secondary {
+      background: var(--bg-secondary);
+      color: var(--fg);
+      border: 1px solid var(--border);
+      padding: 10px 20px;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .btn-secondary:hover { border-color: var(--accent); color: var(--accent); }
+
+    .theme-toggle {
+      width: 56px; height: 28px;
+      background: var(--bg-secondary);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      cursor: pointer;
+      position: relative;
+      transition: all 0.3s ease;
+    }
+
+    .theme-toggle::after {
+      content: ''; position: absolute;
+      width: 20px; height: 20px;
+      background: var(--accent);
+      border-radius: 50%;
+      top: 3px; left: 3px;
+      transition: all 0.3s ease;
+      box-shadow: 0 2px 8px var(--accent-glow);
+    }
+
+    [data-theme="light"] .theme-toggle::after { left: 31px; }
+
+    /* Search Bar Styles */
+    .search-container {
+      display: none;
+      position: relative;
+      flex-grow: 1;
+      max-width: 500px;
+      margin: 0 1rem;
+    }
+    .search-container.active { display: flex; }
+    .search-wrapper {
+      position: relative;
+      width: 100%;
+      display: flex;
+      align-items: center;
+      background: var(--bg-secondary);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 0 4px;
+      transition: all 0.3s ease;
+    }
+    .search-wrapper:focus-within {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px var(--accent-glow);
+    }
+    .search-input {
+      background: transparent;
+      border: none;
+      width: 100%;
+      padding: 8px 12px;
+      font-size: 14px;
+      color: var(--fg);
+      outline: none;
+    }
+    .search-input::placeholder { color: var(--fg-muted); }
+    .search-nav-btn {
+      background: transparent;
+      border: none;
+      color: var(--fg-muted);
+      cursor: pointer;
+      padding: 4px;
+      border-radius: 6px;
+      transition: all 0.2s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .search-nav-btn:hover { color: var(--fg); background: var(--border); }
+    .search-counter {
+      font-size: 11px;
+      color: var(--fg-muted);
+      padding: 0 8px;
+      border-left: 1px solid var(--border);
+      margin-right: 4px;
+      min-width: 40px;
+      text-align: center;
+    }
+
+    @keyframes slideIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+    @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+    .animate-fade-in { animation: fadeIn 0.5s ease; }
+
+    ::-webkit-scrollbar { width: 8px; height: 8px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
+    ::-webkit-scrollbar-thumb:hover { background: var(--fg-muted); }
+
+    .stats-badge {
+      display: inline-flex; align-items: center; gap: 6px;
+      background: var(--bg-secondary);
+      border: 1px solid var(--border);
+      padding: 6px 12px;
+      border-radius: 20px;
+      font-size: 12px;
+      color: var(--fg-muted);
+      white-space: nowrap;
+    }
+    .stats-badge .dot { width: 6px; height: 6px; background: var(--accent); border-radius: 50%; }
+    .stats-badge .dot-orange { background: var(--accent-secondary); }
+    .stats-badge .dot-gold { background: var(--accent-js); }
+
+    .toast {
+      position: fixed; bottom: 24px; right: 24px;
+      background: var(--accent); color: #000;
+      padding: 12px 24px;
+      border-radius: 8px;
+      font-weight: 500;
+      transform: translateY(100px);
+      opacity: 0;
+      transition: all 0.3s ease;
+      z-index: 1000;
+    }
+    .toast.show { transform: translateY(0); opacity: 1; }
+    .line-count {
+      font-size: 11px;
+      color: var(--fg-muted);
+      background: var(--bg);
+      padding: 2px 8px;
+      border-radius: 4px;
+    }
+    .url-type-icon { width: 18px; height: 18px; opacity: 0.6; }
+
+    @media (max-width: 900px) {
+      .search-container { order: 3; margin: 0.5rem 0 0 0; max-width: 100%; }
+      header > div { flex-wrap: wrap; }
+    }
+  </style>
 </head>
 <body>
-    <!-- Skip Link for Accessibility -->
-    <a href="#coaching" class="skip-link">Zum Hauptinhalt springen</a>
+  <div class="bg-pattern"></div>
+  <div class="bg-grid"></div>
 
-    <!-- News Ticker -->
-    <div class="news-ticker" role="marquee" aria-label="Aktuelle Neuigkeiten">
-        <div class="news-ticker-content">
-            <span>Neue Termine verfuegbar - Jetzt Online-Coaching buchen</span>
-            <span>Gratis Erstgespraech fuer neue Klienten</span>
-            <span>Spirituelles Wochenend-Seminar am 15. März 2025</span>
-            <span>Firmencoaching - Angebot anfordern</span>
-            <span>Neue Termine verfuegbar - Jetzt Online-Coaching buchen</span>
-            <span>Gratis Erstgespraech fuer neue Klienten</span>
-            <span>Spirituelles Wochenend-Seminar am 15. Maerz 2025</span>
-            <span>Firmencoaching - Angebot anfordern</span>
+  <header class="sticky top-0 z-50 backdrop-blur-xl border-b border-[var(--border)]">
+    <div class="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between gap-4">
+
+      <div class="flex items-center gap-4 shrink-0">
+        <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-[var(--accent)] to-emerald-600 flex items-center justify-center">
+          <svg class="w-5 h-5 text-black" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"/>
+          </svg>
         </div>
+        <div>
+          <h1 class="text-lg font-bold">HTML Text Editor</h1>
+          <p class="text-xs text-[var(--fg-muted)]">Bearbeite Texte und URLs</p>
+        </div>
+      </div>
+
+      <div id="searchContainer" class="search-container">
+        <div class="search-wrapper">
+          <input type="text" id="searchInput" class="search-input" placeholder="Inhalte durchsuchen...">
+          <div class="search-counter" id="searchCounter">0/0</div>
+          <button class="search-nav-btn" onclick="navigateSearch(-1)" title="Vorheriger Treffer">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7"/></svg>
+          </button>
+          <button class="search-nav-btn" onclick="navigateSearch(1)" title="Nächster Treffer">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+          </button>
+        </div>
+      </div>
+
+      <div class="flex items-center gap-4 shrink-0">
+        <div class="stats-badge" id="statsBadge" style="display: none;">
+          <span class="dot"></span>
+          <span id="textCount">0</span> HTML
+        </div>
+        <div class="stats-badge" id="jsStatsBadge" style="display: none;">
+          <span class="dot dot-gold"></span>
+          <span id="jsCount">0</span> JS
+        </div>
+        <div class="stats-badge" id="urlStatsBadge" style="display: none;">
+          <span class="dot dot-orange"></span>
+          <span id="urlCount">0</span> URLs
+        </div>
+        <button class="theme-toggle" id="themeToggle" aria-label="Theme wechseln"></button>
+      </div>
     </div>
+  </header>
 
-    <!-- Navigation Header -->
-    <nav class="nav-container" role="navigation" aria-label="Hauptnavigation">
-        <div class="max-w-7xl mx-auto px-4 md:px-6">
-            <div class="flex items-center justify-between h-16">
-                <!-- Logo -->
-                <a href="#" class="font-display text-2xl font-bold" style="color: var(--text-primary);">
-                    <img src="Bilder/luminaris_logo.webp"
-                        alt="Brigitte Murr Logo"
-                        style="max-width: 150px">
-                </a>
-
-                <!-- Desktop Navigation -->
-                <div class="hidden md:flex items-center gap-1" role="menubar">
-                    <a href="#about" class="nav-link" role="menuitem">Ueber mich</a>
-                    <a href="#coaching" class="nav-link" role="menuitem">Coaching</a>
-                    <a href="#kontakt" class="nav-link" role="menuitem">Kontakt</a>
-                    <a href="#faq" class="nav-link" role="menuitem">FAQ</a>
-                </div>
-
-                <!-- Mobile Menu Button -->
-                <button class="mobile-menu-btn md:hidden"
-                        onclick="toggleMobileMenu()"
-                        aria-expanded="false"
-                        aria-controls="mobileNav"
-                        aria-label="Menu oeffnen">
-                    <div class="hamburger">
-                        <span></span>
-                        <span></span>
-                        <span></span>
-                    </div>
-                </button>
-
-
-                <!-- Mobile Navigation -->
-                <div class="mobile-nav md:hidden" id="mobileNav" role="menu">
-                    <a href="#about" role="menuitem" onclick="closeMobileMenu()">Ueber mich</a>
-                    <a href="#coaching" role="menuitem" onclick="closeMobileMenu()">Coaching</a>
-                    <a href="#kontakt" role="menuitem" onclick="closeMobileMenu()">Kontakt</a>
-                    <a href="#faq" role="menuitem" onclick="closeMobileMenu()">FAQ</a>
-                </div>
-            </div>
+  <main class="max-w-7xl mx-auto px-6 py-8">
+    <section id="inputSection" class="mb-8 animate-fade-in">
+      <div class="glass-card p-6">
+        <div class="flex items-center justify-between mb-4">
+          <h2 class="font-bold text-lg">HTML Code einfugen</h2>
+          <button class="btn-secondary text-sm" onclick="loadExample()">Beispiel laden</button>
         </div>
-    </nav>
-
-    <!-- Main Content -->
-    <main>
-        <!-- Header / Hero -->
-        <header class="relative min-h-[60vh] flex items-center justify-center overflow-hidden">
-            <!-- Background Image - Wald -->
-            <div class="absolute inset-0 z-0">
-                <img src="https://images.unsplash.com/photo-1448375240586-882707db888b?w=1920&q=80"
-                     alt=""
-                     class="w-full h-full object-cover"
-                     role="presentation">
-            </div>
-
-            <!-- Gradient Overlay -->
-            <div class="absolute inset-0 z-10" style="background: linear-gradient(135deg, rgba(254, 249, 231, 0.88) 0%, rgba(235, 245, 251, 0.88) 50%, rgba(232, 246, 243, 0.88) 100%);"></div>
-
-            <!-- Header Content -->
-            <div class="relative z-20 text-center px-6 fade-in">
-                <img src="Bilder/luminaris_logo.webp"
-                    alt="Ruhiger Wald mit Sonnenlicht"
-                    class="logo-class">
-                <p class="text-lg md:text-xl font-light tracking-wide" style="color: var(--text-muted);">
-                    Coaching mit Spirit
-                </p>
-            </div>
-        </header>
-
-        <!-- About Section -->
-        <section id="about" class="py-16 md:py-20 px-4 md:px-6" style="overflow: hidden;" aria-labelledby="about-heading">
-            <div class="max-w-6xl mx-auto">
-                <div class="flex flex-col lg:flex-row gap-8 md:gap-12 items-center">
-
-                    <!-- Left: Image Stack -->
-                    <div class="lg:w-2/5 slide-in-left" style="width: 240px; margin: auto;">
-                        <div class="image-stack cursor-pointer"
-                             onclick="toggleImageSwap(this)"
-                             onkeydown="handleImageKeydown(event, this)"
-                             tabindex="0"
-                             role="button"
-                             aria-label="Klicken um Bilder zu tauschen">
-
-                            <!-- Bild 2 (Hintergrund - Rueckseite) -->
-                            <img src="Bilder/BrigitteMurr.webp" alt="Brigitte Murr - Bild 2" class="stack-img stack-back">
-
-                            <!-- Bild 1 (Vordergrund - Frontseite) -->
-                            <img src="Bilder/BrigitteMurr-More.jpg" alt="Brigitte Murr - Portrait" class="stack-img stack-front">
-
-                            <!-- Decorative Element -->
-                            <div class="absolute -bottom-4 -right-4 w-32 h-32 rounded-full opacity-30 -z-10" style="background: linear-gradient(135deg, var(--accent-yellow), var(--accent-turquoise));"></div>
-                        </div>
-                    </div>
-
-                    <!-- Right Text Box -->
-                    <div class="card p-6 md:p-8 slide-in-right" style="animation-delay: 0.2s; background: linear-gradient(145deg, #FFFFFF 0%, var(--bg-soft-yellow) 100%);" tabindex="0">
-                        <h1 id="about-heading" class="font-display text-3xl md:text-5xl font-bold mb-6" style="color: var(--text-primary);">
-                            Brigitte Murr
-                        </h1>
-                        <ul class="space-y-4">
-                            <li class="flex items-start gap-3">
-                                <span class="w-2 h-2 rounded-full mt-2 flex-shrink-0" style="background: var(--gradient-gold);"></span>
-                                <span class="text-base md:text-lg leading-relaxed">
-                                <span class="complex-text">Anerkannte Coaching Mentorin mit Spirituellem Touch</span>
-                                <span class="easy-text">Ich bin Coach und helfe Menschen mit spiritueller Arbeit</span>
-                                </span>
-                            </li>
-                            <li class="flex items-start gap-3">
-                                <span class="w-2 h-2 rounded-full mt-2 flex-shrink-0" style="background: var(--gradient-gold);"></span>
-                                <span class="text-base md:text-lg leading-relaxed">
-                                <span class="complex-text">Begleitung auf Ihrem Weg zu innerer Klarheit und Staerke</span>
-                                <span class="easy-text">Ich begleite Sie auf Ihrem Weg</span>
-                                </span>
-                            </li>
-                            <li class="flex items-start gap-3">
-                                <span class="w-2 h-2 rounded-full mt-2 flex-shrink-0" style="background: var(--gradient-gold);"></span>
-                                <span class="text-base md:text-lg leading-relaxed">
-                                <span class="complex-text">Individuelle Sessions fuer persoenliche Entwicklung</span>
-                                <span class="easy-text">Ich biete einzelne Sitzungen an</span>
-                                </span>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- Overview Section -->
-        <section id="ziele" class="py-16 md:py-20 px-4 md:px-6" aria-labelledby="ziele-heading">
-            <div class="max-w-6xl mx-auto">
-
-                <!-- Section Header -->
-                <div class="text-center mb-12 md:mb-16 fade-in">
-                    <h2 id="ziele-heading" class="font-display text-3xl md:text-5xl font-bold mb-4" style="color: var(--text-primary);">
-                        Moegliche Ziele in Coaching & Training
-                    </h2>
-                    <p class="text-base md:text-lg max-w-2xl mx-auto" style="color: var(--text-muted);">
-                        Individuelle Entwicklungswege fuer Fuehrungskraefte, Mitarbeiter und Teams.
-                    </p>
-                </div>
-
-                <!-- Ziele Grid (Responsive: 1 Spalte Mobile -> 2 Spalten Tablet -> 4 Spalten Desktop) -->
-                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 md:gap-8">
-
-                    <!-- Karte 1: Fuehrungskraefte -->
-                    <div class="card p-6 md:p-8 fade-in" style="animation-delay: 0.1s; background: linear-gradient(145deg, #FFFFFF 0%, var(--bg-soft-turquoise) 100%);" tabindex="0">
-                        <div class="mb-6" style="border-bottom: solid 1px #ddd;padding-bottom: 12px;">
-                            <!-- Icon Container -->
-                            <div class="w-14 h-14 rounded-2xl flex items-center justify-center mb-4" style="background: linear-gradient(135deg, var(--accent-turquoise), var(--accent-blue)); box-shadow: 0 8px 15px rgba(72, 201, 176, 0.3);">
-                                <svg class="w-7 h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path>
-                                </svg>
-                            </div>
-                            <h3 class="font-display text-xl md:text-2xl font-bold" style="color: var(--text-primary);">
-                                Fuehrungskraefte
-                            </h3>
-                            <p class="text-xs uppercase tracking-wider mt-1 font-semibold" style="color: var(--accent-turquoise);">
-                                Mittlere & Obere Ebene
-                            </p>
-                        </div>
-                        <ul class="space-y-3">
-                            <li class="flex items-start gap-3">
-                                <span class="w-1.5 h-1.5 rounded-full mt-2 flex-shrink-0" style="background: var(--accent-turquoise);"></span>
-                                <span class="text-sm md:text-base leading-relaxed" style="color: var(--text-muted);">Wettbewerbsfaehigkeit steigern</span>
-                            </li>
-                            <li class="flex items-start gap-3">
-                                <span class="w-1.5 h-1.5 rounded-full mt-2 flex-shrink-0" style="background: var(--accent-turquoise);"></span>
-                                <span class="text-sm md:text-base leading-relaxed" style="color: var(--text-muted);">Neue Strategien entwickeln</span>
-                            </li>
-                            <li class="flex items-start gap-3">
-                                <span class="w-1.5 h-1.5 rounded-full mt-2 flex-shrink-0" style="background: var(--accent-turquoise);"></span>
-                                <span class="text-sm md:text-base leading-relaxed" style="color: var(--text-muted);">Komplexe Veraenderungsprozesse steuern</span>
-                            </li>
-                        </ul>
-                    </div>
-
-                    <!-- Karte 2: Angehende Fuehrungskraefte -->
-                    <div class="card p-6 md:p-8 fade-in" style="animation-delay: 0.2s; background: linear-gradient(145deg, #FFFFFF 0%, var(--bg-soft-blue) 100%);" tabindex="0">
-                        <div class="mb-6" style="border-bottom: solid 1px #ddd;padding-bottom: 12px;">
-                            <div class="w-14 h-14 rounded-2xl flex items-center justify-center mb-4" style="background: linear-gradient(135deg, var(--accent-blue), #A569BD); box-shadow: 0 8px 15px rgba(93, 173, 226, 0.3);">
-                                <svg class="w-7 h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
-                                </svg>
-                            </div>
-                            <h3 class="font-display text-xl md:text-2xl font-bold" style="color: var(--text-primary);">
-                                Lehrlinge
-                            </h3>
-                            <p class="text-xs uppercase tracking-wider mt-1 font-semibold" style="color: var(--accent-blue);">
-                                Entwicklung & Wachstum
-                            </p>
-                        </div>
-                        <ul class="space-y-3">
-                            <li class="flex items-start gap-3">
-                                <span class="w-1.5 h-1.5 rounded-full mt-2 flex-shrink-0" style="background: var(--accent-blue);"></span>
-                                <span class="text-sm md:text-base leading-relaxed" style="color: var(--text-muted);">Vorbereitung auf die neue Rolle</span>
-                            </li>
-                            <li class="flex items-start gap-3">
-                                <span class="w-1.5 h-1.5 rounded-full mt-2 flex-shrink-0" style="background: var(--accent-blue);"></span>
-                                <span class="text-sm md:text-base leading-relaxed" style="color: var(--text-muted);">Fuehrungskompetenzen aufbauen</span>
-                            </li>
-                            <li class="flex items-start gap-3">
-                                <span class="w-1.5 h-1.5 rounded-full mt-2 flex-shrink-0" style="background: var(--accent-blue);"></span>
-                                <span class="text-sm md:text-base leading-relaxed" style="color: var(--text-muted);">Authentizitaet entwickeln</span>
-                            </li>
-                        </ul>
-                    </div>
-
-                    <!-- Karte 3: Mitarbeiter -->
-                    <div class="card p-6 md:p-8 fade-in" style="animation-delay: 0.3s; background: linear-gradient(145deg, #FFFFFF 0%, var(--bg-soft-yellow) 100%);" tabindex="0">
-                        <div class="mb-6" style="border-bottom: solid 1px #ddd;padding-bottom: 12px;">
-                            <div class="w-14 h-14 rounded-2xl flex items-center justify-center mb-4" style="background: linear-gradient(135deg, var(--accent-yellow), #E67E22); box-shadow: 0 8px 15px rgba(247, 220, 111, 0.4);">
-                                <svg class="w-7 h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"></path>
-                                </svg>
-                            </div>
-                            <h3 class="font-display text-xl md:text-2xl font-bold" style="color: var(--text-primary);">
-                                Mitarbeiter
-                            </h3>
-                            <p class="text-xs uppercase tracking-wider mt-1 font-semibold" style="color: #E67E22;">
-                                Potenzialentfaltung
-                            </p>
-                        </div>
-                        <ul class="space-y-3">
-                            <li class="flex items-start gap-3">
-                                <span class="w-1.5 h-1.5 rounded-full mt-2 flex-shrink-0" style="background: #E67E22;"></span>
-                                <span class="text-sm md:text-base leading-relaxed" style="color: var(--text-muted);">Fachliche und soziale Kompetenzen erweitern</span>
-                            </li>
-                            <li class="flex items-start gap-3">
-                                <span class="w-1.5 h-1.5 rounded-full mt-2 flex-shrink-0" style="background: #E67E22;"></span>
-                                <span class="text-sm md:text-base leading-relaxed" style="color: var(--text-muted);">Selbstmanagement optimieren</span>
-                            </li>
-                            <li class="flex items-start gap-3">
-                                <span class="w-1.5 h-1.5 rounded-full mt-2 flex-shrink-0" style="background: #E67E22;"></span>
-                                <span class="text-sm md:text-base leading-relaxed" style="color: var(--text-muted);">Karriereplanung</span>
-                            </li>
-                        </ul>
-                    </div>
-
-                    <!-- Karte 4: Teams -->
-                    <div class="card p-6 md:p-8 fade-in" style="animation-delay: 0.4s; background: linear-gradient(145deg, #FFFFFF 0%, #E8DAEF 100%);" tabindex="0">
-                        <div class="mb-6" style="border-bottom: solid 1px #ddd;padding-bottom: 12px;">
-                            <div class="w-14 h-14 rounded-2xl flex items-center justify-center mb-4" style="background: linear-gradient(135deg, #9B59B6, #3498DB); box-shadow: 0 8px 15px rgba(155, 89, 182, 0.3);">
-                                <svg class="w-7 h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path>
-                                </svg>
-                            </div>
-                            <h3 class="font-display text-xl md:text-2xl font-bold" style="color: var(--text-primary);">
-                                Teams
-                            </h3>
-                            <p class="text-xs uppercase tracking-wider mt-1 font-semibold" style="color: #9B59B6;">
-                                Zusammenarbeit
-                            </p>
-                        </div>
-                        <ul class="space-y-3">
-                            <li class="flex items-start gap-3">
-                                <span class="w-1.5 h-1.5 rounded-full mt-2 flex-shrink-0" style="background: #9B59B6;"></span>
-                                <span class="text-sm md:text-base leading-relaxed" style="color: var(--text-muted);">Zusammenarbeit verbessern</span>
-                            </li>
-                            <li class="flex items-start gap-3">
-                                <span class="w-1.5 h-1.5 rounded-full mt-2 flex-shrink-0" style="background: #9B59B6;"></span>
-                                <span class="text-sm md:text-base leading-relaxed" style="color: var(--text-muted);">Konflikte loesen</span>
-                            </li>
-                            <li class="flex items-start gap-3">
-                                <span class="w-1.5 h-1.5 rounded-full mt-2 flex-shrink-0" style="background: #9B59B6;"></span>
-                                <span class="text-sm md:text-base leading-relaxed" style="color: var(--text-muted);">Kommunikationskultur staerken</span>
-                            </li>
-                        </ul>
-                    </div>
-
-                </div>
-            </div>
-        </section>
-
-        <!-- Quote Section -->
-        <section class="py-16 md:py-20 px-4 md:px-6" aria-labelledby="quote-heading" tabindex="0">
-            <div class="max-w-4xl mx-auto text-center fade-in">
-                <div class="relative">
-                    <span class="quote-mark absolute -top-8 left-0 md:left-8" aria-hidden="true">"</span>
-                    <blockquote class="font-display text-xl sm:text-2xl md:text-4xl italic leading-relaxed px-8" style="color: var(--text-primary);" id="quote-heading">
-                        Alles ist vom Nichts abhaengig und Nichts ist ewig.
-                    </blockquote>
-                    <span class="quote-mark absolute -bottom-12 md:-bottom-16 right-0 md:right-8" aria-hidden="true">"</span>
-                </div>
-                <p class="mt-8 text-lg">
-                    <cite><span class="gold-shimmer font-display text-xl md:text-3xl font-bold">- prinzip100</span></cite>
-                </p>
-            </div>
-        </section>
-
-        <!-- Category Slider Section -->
-        <section id="coaching" class="py-16 md:py-20 px-4 md:px-6" style="background: linear-gradient(180deg, transparent 0%, var(--bg-soft-turquoise) 50%, transparent 100%);" aria-labelledby="coaching-heading">
-            <div class="max-w-7xl mx-auto slider-section">
-                <h2 id="coaching-heading" class="font-display text-3xl md:text-5xl font-bold text-center mb-4 fade-in" style="color: var(--text-primary); line-height: 0.4;">
-                    Coaching Angebote
-                </h2>
-                <p class="text-center text-base md:text-lg mb-8 md:mb-12 fade-in" style="color: var(--text-muted);">
-                    Finden Sie das passende Coaching fuer Ihren Weg
-                </p>
-
-                <!-- Filter Tabs - Integrated Design -->
-                <div class="filter-section fade-in">
-                    <div class="filter-tabs" role="tablist" aria-label="Kategoriefilter">
-                        <button class="filter-tab active" role="tab" aria-selected="true" data-category="all" onclick="filterCategory('all', this)">Alle anzeigen</button>
-                        <button class="filter-tab" role="tab" aria-selected="false" data-category="professionell" onclick="filterCategory('professionell', this)">Professionell</button>
-                        <button class="filter-tab" role="tab" aria-selected="false" data-category="spirituell" onclick="filterCategory('spirituell', this)">Spirituell</button>
-                        <button class="filter-tab" role="tab" aria-selected="false" data-category="firmen" onclick="filterCategory('firmen', this)">Firmen</button>
-                        <button class="filter-tab" role="tab" aria-selected="false" data-category="privat" onclick="filterCategory('privat', this)">Privat</button>
-                    </div>
-                </div>
-
-                <!-- Slider -->
-                <div class="relative fade-in">
-                    <div class="slider-container" role="region" aria-label="Coaching-Angebote Slider">
-                        <div class="slider-track" id="sliderTrack">
-                            <!-- Cards will be inserted by JS -->
-                        </div>
-                    </div>
-
-                    <!-- Navigation Arrows -->
-                    <button class="slider-nav-btn prev" onclick="slide(-1)" aria-label="Vorherige Angebote anzeigen">
-                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
-                        </svg>
-                    </button>
-                    <button class="slider-nav-btn next" onclick="slide(1)" aria-label="Naechste Angebote anzeigen">
-                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
-                        </svg>
-                    </button>
-                </div>
-            </div>
-        </section>
-
-        <!-- Contact Form Section -->
-        <section id="kontakt" class="py-16 md:py-20 px-4 md:px-6" aria-labelledby="kontakt-heading">
-            <div class="max-w-3xl mx-auto">
-                <h2 id="kontakt-heading" class="font-display text-3xl md:text-5xl font-bold text-center mb-4 fade-in" style="color: var(--text-primary);">
-                    Kontakt aufnehmen
-                </h2>
-                <p class="text-center text-base md:text-lg mb-8 md:mb-12 fade-in" style="color: var(--text-muted);">
-                    <span class="complex-text">Ich freue mich auf Ihre Nachricht</span>
-                    <span class="easy-text">Schreiben Sie mir eine Nachricht</span>
-                </p>
-
-                <form class="card p-6 md:p-12 fade-in" id="contactForm" onsubmit="handleSubmit(event)" aria-label="Kontaktformular">
-                    <div class="grid md:grid-cols-2 gap-4 md:gap-6 mb-6">
-                        <div>
-                            <label for="name" class="block text-sm font-semibold mb-2" style="color: var(--text-primary);">
-                                Name <span style="color: var(--accent-turquoise);" aria-hidden="true">*</span>
-                                <span class="sr-only">(erforderlich)</span>
-                            </label>
-                            <input type="text" id="name" name="name" class="form-input" placeholder="Ihr Name" required aria-required="true">
-                        </div>
-                        <div>
-                            <label for="email" class="block text-sm font-semibold mb-2" style="color: var(--text-primary);">
-                                E-Mail <span style="color: var(--accent-turquoise);" aria-hidden="true">*</span>
-                                <span class="sr-only">(erforderlich)</span>
-                            </label>
-                            <input type="email" id="email" name="email" class="form-input" placeholder="ihre@email.de" required aria-required="true">
-                        </div>
-                    </div>
-                    <div class="mb-6">
-                        <label for="betreff" class="block text-sm font-semibold mb-2" style="color: var(--text-primary);">
-                            Betreff <span style="color: var(--accent-turquoise);" aria-hidden="true">*</span>
-                            <span class="sr-only">(erforderlich)</span>
-                        </label>
-                        <input type="text" id="betreff" name="betreff" class="form-input" placeholder="Worum geht es?" required aria-required="true">
-                    </div>
-                    <div class="mb-8">
-                        <label for="nachricht" class="block text-sm font-semibold mb-2" style="color: var(--text-primary);">
-                            Nachricht <span style="color: var(--accent-turquoise);" aria-hidden="true">*</span>
-                            <span class="sr-only">(erforderlich)</span>
-                        </label>
-                        <textarea id="nachricht" name="nachricht" class="form-input" rows="5" placeholder="Ihre Nachricht an mich..." required aria-required="true"></textarea>
-                    </div>
-                    <button type="submit" class="btn-primary w-full md:w-auto">
-                        Nachricht senden
-                    </button>
-                </form>
-            </div>
-        </section>
-
-        <!-- Newsletter Section -->
-
-        <section id="newsletter" class="py-16 md:py-20 px-4 md:px-6" style="border-radius: 12px;" aria-labelledby="newsletter-heading">
-        <div class="max-w-3xl mx-auto ">
-
-            <!-- Card Container -->
-            <div class="content-card p-8 md:p-12" style="background: linear-gradient(135deg, var(--bg-soft-turquoise) 0%, var(--bg-soft-blue) 100%); border: 1px solid var(--border-light); border: none; border-radius: 12px;
-  box-shadow: inset 0 10px 12px #00000010;">
-
-                <div class="text-center mb-8">
-                    <!-- Icon -->
-                    <div class="w-16 h-16 mx-auto mb-6 rounded-full flex items-center justify-center" style="background: rgba(255,255,255,0.6); box-shadow: 0 4px 12px var(--shadow-color);">
-                        <svg class="w-8 h-8" style="color: var(--accent-turquoise);" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
-                        </svg>
-                    </div>
-
-                    <h2 id="newsletter-heading" class="font-display text-3xl md:text-4xl font-bold mb-3" style="color: var(--text-primary);">
-                        Inspiration direkt ins Postfach
-                    </h2>
-                    <p class="text-base md:text-lg" style="color: var(--text-muted);">
-                        <span class="complex-text">Erhalten Sie woechentlich Impulse, Tipps und exklusive Einblicke.</span>
-                        <span class="easy-text">Ich schicke Ihnen Tipps und Neuigkeiten per E-Mail.</span>
-                    </p>
-                </div>
-
-                <!-- Formular
-                     WICHTIG: Brevo benötigt standardmäßig das Feld "email".
-                     Das Hidden-Field "locale" hilft bei der Zuordnung. -->
-                <form action="HIER_BREVO_FORM_ACTION_URL_EINFUEGEN" method="POST" class="flex flex-col sm:flex-row gap-4 max-w-xl mx-auto" id="newsletterForm">
-
-                    <div class="flex-grow relative">
-                        <label for="newsletter-email" class="sr-only">E-Mail Adresse</label>
-                        <input
-                            type="email"
-                            id="newsletter-email"
-                            name="email"
-                            class="form-input w-full pr-12"
-                            placeholder="Ihre E-Mail Adresse"
-                            required
-                            aria-required="true"
-                            autocomplete="email">
-                    </div>
-
-                    <button type="submit" class="btn-primary flex-shrink-0 px-8">
-                        Anmelden
-                    </button>
-                </form>
-
-                <!-- Hinweis Datenschutz -->
-                <p class="text-center text-xs mt-6" style="color: var(--text-muted);">
-                    <span class="complex-text">Ich respektiere Ihre Privatsphaere. Abmeldung jederzeit moeglich.</span>
-                    <span class="easy-text">Ich gebe Ihre Daten nicht weiter. Sie koennen immer abmelden.</span>
-                </p>
-
-            </div>
+        <textarea
+          id="htmlInput"
+          class="code-editor mono w-full h-64 p-4 text-sm"
+          placeholder="Fuge hier deinen HTML-Code ein..."
+          spellcheck="false"
+        ></textarea>
+        <div class="flex items-center justify-between mt-4">
+          <p class="text-sm text-[var(--fg-muted)]">Der Code wird lokal verarbeitet - nichts wird ubertragen</p>
+          <button class="btn-primary" onclick="parseHTML()">
+            <span class="flex items-center gap-2">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+              </svg>
+              Analysieren
+            </span>
+          </button>
         </div>
+      </div>
     </section>
 
-        <!-- FAQ Section -->
-        <section id="faq" class="py-16 md:py-20 px-4 md:px-6" style="background: linear-gradient(180deg, transparent 0%, var(--bg-soft-blue) 50%, transparent 100%);" aria-labelledby="faq-heading">
-            <div class="max-w-3xl mx-auto">
-                <h2 id="faq-heading" class="font-display text-3xl md:text-5xl font-bold text-center mb-4 fade-in" style="color: var(--text-primary);">
-                    Haeufige Fragen
-                </h2>
-                <p class="text-center text-base md:text-lg mb-8 md:mb-12 fade-in" style="color: var(--text-muted);">
-                    Antworten auf wichtige Fragen
-                </p>
+    <section id="editorSection" class="main-grid grid grid-cols-1 gap-6" style="display: none;">
 
-                <div class="fade-in" id="faqContainer" role="region" aria-label="Haeufig gestellte Fragen">
-                    <!-- FAQ Items -->
-                    <div class="faq-item">
-                        <button class="faq-question" aria-expanded="false" aria-controls="faq-answer-1">
-                            <span class="text-base md:text-lg font-semibold text-left">
-                                <span class="complex-text">Wie laeuft ein Erstgespraech ab?</span>
-                                <span class="easy-text">Wie beginnt das Coaching?</span>
-                            </span>
-                            <svg class="faq-icon w-5 h-5 md:w-6 md:h-6 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
-                            </svg>
-                        </button>
-                        <div class="faq-answer" id="faq-answer-1" role="region">
-                            <p class="text-sm md:text-base leading-relaxed" style="color: var(--text-muted);">
-                                <span class="complex-text">In einem unverbindlichen Erstgespraech lernen wir uns kennen. Wir besprechen Ihre aktuelle Situation, Ihre Ziele und klaeren, ob wir gut zusammenpassen. Das Erstgespraech dauert etwa 30 Minuten und ist kostenlos.</span>
-                                <span class="easy-text">Wir lernen uns kennen. Das Erstgespraech ist kostenlos und dauert 30 Minuten.</span>
-                            </p>
-                        </div>
-                    </div>
-
-                    <div class="faq-item">
-                        <button class="faq-question" aria-expanded="false" aria-controls="faq-answer-2">
-                            <span class="text-base md:text-lg font-semibold text-left">
-                                <span class="complex-text">Wie lange dauert ein Coaching Prozess?</span>
-                                <span class="easy-text">Wie lange dauert das Coaching?</span>
-                            </span>
-                            <svg class="faq-icon w-5 h-5 md:w-6 md:h-6 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
-                            </svg>
-                        </button>
-                        <div class="faq-answer" id="faq-answer-2" role="region">
-                            <p class="text-sm md:text-base leading-relaxed" style="color: var(--text-muted);">
-                                <span class="complex-text">Die Dauer ist individuell und haengt von Ihren Zielen ab. Manche Themen lassen sich in 3-5 Sitzungen klaeren, andere benoetigen einen laengeren Zeitraum. Wir legen gemeinsam den optimalen Rahmen fest.</span>
-                                <span class="easy-text">Das ist unterschiedlich. Manchmal reichen 3-5 Sitzungen. Wir entscheiden das zusammen.</span>
-                            </p>
-                        </div>
-                    </div>
-
-                    <div class="faq-item">
-                        <button class="faq-question" aria-expanded="false" aria-controls="faq-answer-3">
-                            <span class="text-base md:text-lg font-semibold text-left">
-                                <span class="complex-text">Bieten Sie auch Online-Sessions an?</span>
-                                <span class="easy-text">Gibt es auch Online-Termine?</span>
-                            </span>
-                            <svg class="faq-icon w-5 h-5 md:w-6 md:h-6 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
-                            </svg>
-                        </button>
-                        <div class="faq-answer" id="faq-answer-3" role="region">
-                            <p class="text-sm md:text-base leading-relaxed" style="color: var(--text-muted);">
-                                <span class="complex-text">Ja, ich biete sowohl persoenliche Sessions in meiner Praxis als auch Online-Coaching via Videocall an. Beide Formate sind gleichermassen effektiv.</span>
-                                <span class="easy-text">Ja, ich biete Termine in meiner Praxis und Online an. Beides funktioniert gut.</span>
-                            </p>
-                        </div>
-                    </div>
-
-                    <div class="faq-item">
-                        <button class="faq-question" aria-expanded="false" aria-controls="faq-answer-4">
-                            <span class="text-base md:text-lg font-semibold text-left">
-                                <span class="complex-text">Was unterscheidet spirituelles Coaching vom klassischen Coaching?</span>
-                                <span class="easy-text">Was ist spirituelles Coaching?</span>
-                            </span>
-                            <svg class="faq-icon w-5 h-5 md:w-6 md:h-6 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
-                            </svg>
-                        </button>
-                        <div class="faq-answer" id="faq-answer-4" role="region">
-                            <p class="text-sm md:text-base leading-relaxed" style="color: var(--text-muted);">
-                                <span class="complex-text">Spirituelles Coaching verbindet klassische Coaching-Methoden mit spirituellen Elementen wie Achtsamkeit, Meditation und energetischer Arbeit.</span>
-                                <span class="easy-text">Spirituelles Coaching nutzt Meditation und Achtsamkeit. Es verbindet den Kopf mit dem Gefuehl.</span>
-                            </p>
-                        </div>
-                    </div>
-
-                    <div class="faq-item">
-                        <button class="faq-question" aria-expanded="false" aria-controls="faq-answer-5">
-                            <span class="text-base md:text-lg font-semibold text-left">
-                                <span class="complex-text">Wie sind die Kosten aufgebaut?</span>
-                                <span class="easy-text">Was kostet das Coaching?</span>
-                            </span>
-                            <svg class="faq-icon w-5 h-5 md:w-6 md:h-6 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
-                            </svg>
-                        </button>
-                        <div class="faq-answer" id="faq-answer-5" role="region">
-                            <p class="text-sm md:text-base leading-relaxed" style="color: var(--text-muted);">
-                                <span class="complex-text">Die Preise richten sich nach Art und Umfang des Coachings. Im Erstgespraech erhalten Sie eine transparente Kostenuebersicht.</span>
-                                <span class="easy-text">Der Preis haengt vom Coaching ab. Im Erstgespraech nenne ich Ihnen den Preis.</span>
-                            </p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-    </main>
-
-    <!-- Footer -->
-    <footer class="py-8 md:py-12 px-4 md:px-6" style="background: var(--bg-soft-turquoise);" role="contentinfo">
-        <div class="max-w-6xl mx-auto">
-            <!-- Divider Line -->
-            <div class="h-px w-full mb-6 md:mb-8" style="background: linear-gradient(90deg, transparent 0%, var(--border-light) 20%, var(--border-light) 80%, transparent 100%);"></div>
-
-            <div class="flex flex-col md:flex-row justify-between items-center gap-4 md:gap-6">
-                <!-- Copyright -->
-                <p class="text-sm" style="color: var(--text-muted);">
-                    Brigitte Murr© 2024
-                </p>
-
-                <!-- Legal Links -->
-                <nav aria-label="Rechtliche Informationen">
-                    <div class="flex gap-4 md:gap-6">
-                        <a href="impressum.html" class="text-sm underline underline-offset-4 transition-colors duration-300 hover:opacity-70 focus:outline-2 focus:outline-offset-2 focus:outline-current" style="color: var(--text-muted);">
-                            Impressum
-                        </a>
-                        <a href="datenschutz.html" class="text-sm underline underline-offset-4 transition-colors duration-300 hover:opacity-70 focus:outline-2 focus:outline-offset-2 focus:outline-current" style="color: var(--text-muted);">
-                            Datenschutz
-                        </a>
-                        <a href="agb.html" class="text-sm underline underline-offset-4 transition-colors duration-300 hover:opacity-70 focus:outline-2 focus:outline-offset-2 focus:outline-current" style="color: var(--text-muted);">
-                            AGB
-                        </a>
-                    </div>
-                </nav>
-            </div>
+      <!-- HTML Textpassagen -->
+      <div class="glass-card p-6">
+        <div class="flex items-center justify-between mb-4">
+          <h2 class="font-bold text-lg">HTML Textpassagen</h2>
+          <span class="text-sm text-[var(--fg-muted)]">Sichtbarer Inhalt</span>
         </div>
-    </footer>
+        <div id="textList" class="space-y-3 max-h-[400px] overflow-y-auto pr-2"></div>
+      </div>
 
-    <script>
-        // ============================================
-        // DATA
-        // ============================================
-        const coachingData = [
-            {
-                id: 1,
-                category: 'professionell',
-                title: 'Karriere Coaching',
-                price: '120',
-                image: 'https://images.unsplash.com/photo-1522202176988-66273c2fd55f?w=400&q=80',
-                coach: 'Coaching bei Brigitte Murr'
-            },
-            {
-                id: 2,
-                category: 'professionell',
-                title: 'Leadership Entwicklung',
-                price: '150',
-                image: 'https://images.unsplash.com/photo-1552664730-d307ca884978?w=400&q=80',
-                coach: 'Coaching bei Brigitte Murr'
-            },
-            {
-                id: 3,
-                category: 'spirituell',
-                title: 'Spirituelle Begleitung',
-                price: '100',
-                image: 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=400&q=80',
-                coach: 'Coaching bei Brigitte Murr'
-            },
-            {
-                id: 4,
-                category: 'spirituell',
-                title: 'Energiearbeit',
-                price: '90',
-                image: 'https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?w=400&q=80',
-                coach: 'Coaching bei Brigitte Murr'
-            },
-            {
-                id: 5,
-                category: 'firmen',
-                title: 'Team Entwicklung',
-                price: '350',
-                image: 'https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=400&q=80',
-                coach: 'Coaching bei Brigitte Murr'
-            },
-            {
-                id: 6,
-                category: 'firmen',
-                title: 'Fuehrungskraefte Training',
-                price: '400',
-                image: 'https://images.unsplash.com/photo-1557804506-669a67965ba0?w=400&q=80',
-                coach: 'Coaching bei Brigitte Murr'
-            },
-            {
-                id: 7,
-                category: 'privat',
-                title: 'Life Coaching',
-                price: '95',
-                image: 'https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?w=400&q=80',
-                coach: 'Coaching bei Brigitte Murr'
-            },
-            {
-                id: 8,
-                category: 'privat',
-                title: 'Beziehungs Coaching',
-                price: '110',
-                image: 'https://images.unsplash.com/photo-1529156069898-49953e39b3ac?w=400&q=80',
-                coach: 'Coaching bei Brigitte Murr'
+      <!-- Script Inhalte -->
+      <div class="glass-card p-6">
+        <div class="flex items-center justify-between mb-4">
+          <h2 class="font-bold text-lg">Script Inhalte</h2>
+          <span class="text-sm text-[var(--fg-muted)]">Sortiert & Gruppiert</span>
+        </div>
+        <div id="scriptList" class="space-y-3 max-h-[500px] overflow-y-auto pr-2"></div>
+      </div>
+
+      <!-- URLs & Verweise -->
+      <div class="glass-card p-6">
+        <div class="flex items-center justify-between mb-4">
+          <h2 class="font-bold text-lg">URLs & Verweise</h2>
+          <span class="text-sm text-[var(--fg-muted)]">Links, Bilder, etc.</span>
+        </div>
+        <div id="urlList" class="space-y-3 max-h-[400px] overflow-y-auto pr-2"></div>
+      </div>
+
+      <!-- Code Output -->
+      <div class="glass-card p-6">
+        <div class="flex items-center justify-between mb-4">
+          <h2 class="font-bold text-lg">Aktualisierter Code</h2>
+          <button class="btn-primary text-sm" onclick="copyCode()">
+            <span class="flex items-center gap-2">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3"/>
+              </svg>
+              Code kopieren
+            </span>
+          </button>
+        </div>
+        <textarea
+          id="htmlOutput"
+          class="code-editor mono w-full h-[460px] p-4 text-sm"
+          spellcheck="false"
+          readonly
+        ></textarea>
+      </div>
+    </section>
+
+    <div id="backButton" class="mt-6 text-center" style="display: none;">
+      <button class="btn-secondary" onclick="resetEditor()">
+        <span class="flex items-center gap-2">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
+          </svg>
+          Neuen Code laden
+        </span>
+      </button>
+    </div>
+  </main>
+
+  <div class="toast" id="toast">Code in Zwischenablage kopiert!</div>
+
+  <script>
+    // State
+    let htmlTextGroups = [];
+    let scriptTextGroups = [];
+    let urlItems = [];
+    let parsedDoc = null;
+    let originalHTML = '';
+    let hasHtmlWrapper = false;
+    let hasHeadElement = false;
+    let hasBodyElement = false;
+    const scriptDataMap = new Map();
+
+    // Search State
+    let searchMatches = [];
+    let currentSearchIndex = -1;
+
+    // DOM Elements
+    const htmlInput = document.getElementById('htmlInput');
+    const htmlOutput = document.getElementById('htmlOutput');
+    const textList = document.getElementById('textList');
+    const scriptList = document.getElementById('scriptList');
+    const urlList = document.getElementById('urlList');
+    const editorSection = document.getElementById('editorSection');
+    const inputSection = document.getElementById('inputSection');
+    const backButton = document.getElementById('backButton');
+    const statsBadge = document.getElementById('statsBadge');
+    const jsStatsBadge = document.getElementById('jsStatsBadge');
+    const urlStatsBadge = document.getElementById('urlStatsBadge');
+    const textCount = document.getElementById('textCount');
+    const jsCount = document.getElementById('jsCount');
+    const urlCount = document.getElementById('urlCount');
+    const themeToggle = document.getElementById('themeToggle');
+    const toast = document.getElementById('toast');
+
+    // Search Elements
+    const searchContainer = document.getElementById('searchContainer');
+    const searchInput = document.getElementById('searchInput');
+    const searchCounter = document.getElementById('searchCounter');
+
+    const urlAttributes = [
+      { attr: 'href', tags: ['a', 'link', 'area'], label: 'Link', icon: 'link' },
+      { attr: 'src', tags: ['img', 'script', 'iframe', 'embed', 'video', 'audio', 'source', 'track'], label: 'Bild/Datei', icon: 'image' },
+      { attr: 'srcset', tags: ['img', 'source'], label: 'Bildquellen', icon: 'image' },
+      { attr: 'action', tags: ['form'], label: 'Formular-Ziel', icon: 'form' },
+      { attr: 'data', tags: ['object'], label: 'Datenquelle', icon: 'data' },
+      { attr: 'poster', tags: ['video'], label: 'Vorschaubild', icon: 'video' },
+      { attr: 'background', tags: ['body', 'table', 'td', 'th'], label: 'Hintergrund', icon: 'bg' }
+    ];
+
+    // Theme Toggle
+    themeToggle.addEventListener('click', () => {
+      const currentTheme = document.documentElement.getAttribute('data-theme');
+      const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+      document.documentElement.setAttribute('data-theme', newTheme);
+      localStorage.setItem('theme', newTheme);
+    });
+
+    const savedTheme = localStorage.getItem('theme');
+    if (savedTheme) document.documentElement.setAttribute('data-theme', savedTheme);
+
+    // Search Logic
+    searchInput.addEventListener('input', (e) => performSearch(e.target.value));
+
+    function performSearch(query) {
+        searchMatches = [];
+        currentSearchIndex = -1;
+        if (!query) { updateSearchCounter(); return; }
+
+        const selectors = ['#textList textarea', '#scriptList textarea', '#urlList input'];
+        const elements = document.querySelectorAll(selectors.join(', '));
+
+        elements.forEach(el => {
+            const text = el.value.toLowerCase();
+            const searchStr = query.toLowerCase();
+            let startIndex = 0;
+            let index;
+            while ((index = text.indexOf(searchStr, startIndex)) > -1) {
+                searchMatches.push({ element: el, start: index, end: index + searchStr.length });
+                startIndex = index + searchStr.length;
             }
-        ];
+        });
+        if (searchMatches.length > 0) navigateSearch(1);
+        else updateSearchCounter();
+    }
 
-        // ============================================
-        // STATE
-        // ============================================
-        let currentSlide = 0;
-        let currentFilter = 'all';
-        let filteredData = [...coachingData];
-        let cardsPerView = 3;
+    function navigateSearch(direction) {
+        if (searchMatches.length === 0) { updateSearchCounter(); return; }
+        currentSearchIndex += direction;
+        if (currentSearchIndex >= searchMatches.length) currentSearchIndex = 0;
+        if (currentSearchIndex < 0) currentSearchIndex = searchMatches.length - 1;
+        const match = searchMatches[currentSearchIndex];
+        match.element.focus();
+        match.element.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        match.element.setSelectionRange(match.start, match.end);
+        updateSearchCounter();
+    }
 
-        function updateCardsPerView() {
-            if (window.innerWidth < 768) {
-                cardsPerView = 1;
-            } else if (window.innerWidth < 1024) {
-                cardsPerView = 2;
+    function updateSearchCounter() {
+        searchCounter.textContent = searchMatches.length === 0 ? '0/0' : `${currentSearchIndex + 1}/${searchMatches.length}`;
+    }
+
+    function parseHTML() {
+      const input = htmlInput.value.trim();
+      if (!input) { alert('Bitte fuge HTML-Code ein'); return; }
+
+      originalHTML = input;
+      scriptDataMap.clear();
+      htmlTextGroups = [];
+      scriptTextGroups = [];
+      urlItems = [];
+
+      hasHtmlWrapper = /<html[^>]*>/i.test(input);
+      hasHeadElement = /<head[^>]*>/i.test(input);
+      hasBodyElement = /<body[^>]*>/i.test(input);
+
+      const parser = new DOMParser();
+      parsedDoc = parser.parseFromString(input, 'text/html');
+
+      walkAndGroupHTML(parsedDoc.body);
+      extractScriptsAdvanced(); // NEW LOGIC
+      extractURLs();
+
+      if (htmlTextGroups.length === 0 && scriptTextGroups.length === 0 && urlItems.length === 0) {
+        alert('Keine bearbeitbaren Inhalte gefunden.');
+        return;
+      }
+      showEditor();
+    }
+
+    // 1. HTML Text
+    function walkAndGroupHTML(element) {
+      if (!element || !element.childNodes) return;
+      let i = 0;
+      while (i < element.childNodes.length) {
+        const node = element.childNodes[i];
+        if (node.nodeType === Node.TEXT_NODE) {
+          const text = node.textContent;
+          if (!text.trim()) { i++; continue; }
+          const group = { type: 'html', nodes: [], tagName: element.tagName ? element.tagName.toLowerCase() : 'text', parent: element, displayText: '' };
+          group.nodes.push({ type: 'text', content: text, node: node });
+          let j = i + 1;
+          while (j < element.childNodes.length) {
+             const nextNode = element.childNodes[j];
+             if (nextNode.nodeType === Node.ELEMENT_NODE && nextNode.tagName === 'BR') {
+               const afterBr = element.childNodes[j + 1];
+               if (afterBr && afterBr.nodeType === Node.TEXT_NODE) {
+                 group.nodes.push({ type: 'br', node: nextNode });
+                 group.nodes.push({ type: 'text', content: afterBr.textContent, node: afterBr });
+                 j += 2;
+               } else { group.nodes.push({ type: 'br', node: nextNode }); j++; }
+             } else if (nextNode.nodeType === Node.TEXT_NODE && !nextNode.textContent.trim()) { j++; }
+             else { break; }
+          }
+          group.displayText = group.nodes.map(n => n.type === 'text' ? (n.content || '') : '\n').join('');
+          htmlTextGroups.push(group);
+          i = j;
+        } else if (node.nodeType === Node.ELEMENT_NODE) {
+          const tag = node.tagName.toLowerCase();
+          if (tag !== 'script' && tag !== 'style') walkAndGroupHTML(node);
+          i++;
+        } else { i++; }
+      }
+    }
+
+    // 2. Advanced Script Extraction
+    function extractScriptsAdvanced() {
+      const scripts = parsedDoc.getElementsByTagName('script');
+      // Colors for grouping
+      const groupColors = ['var(--group-color-1)', 'var(--group-color-2)', 'var(--group-color-3)', 'var(--group-color-4)', 'var(--group-color-5)'];
+
+      for (let script of scripts) {
+        const code = script.textContent;
+        if (!code.trim()) continue;
+
+        const parts = [];
+        // Regex for strings (single, double, backtick) - simplified for robustness
+        const stringRegex = /(["'`])(?:(?!\1)[^\\]|\\.)*\1/g;
+
+        let lastIndex = 0;
+        let match;
+        let braceDepth = 0;
+
+        // Helper to count braces in non-string code
+        const countBraces = (txt) => {
+            let count = 0;
+            // Very basic brace counting ignoring quotes inside (since we split by strings)
+            for(let char of txt) {
+                if(char === '{') count++;
+                else if(char === '}') count--;
+            }
+            return count;
+        };
+
+        while ((match = stringRegex.exec(code)) !== null) {
+            // 1. Gap Code (Text before this string)
+            const gapText = code.substring(lastIndex, match.index);
+
+            // Update brace depth based on gap
+            braceDepth += countBraces(gapText);
+            if(braceDepth < 0) braceDepth = 0; // Reset if malformed
+
+            if (gapText) parts.push({ type: 'code', text: gapText });
+
+            // 2. The String
+            const fullMatch = match[0];
+            const quote = match[1];
+            const content = fullMatch.substring(1, fullMatch.length - 1); // Remove quotes
+
+            // Determine Type
+            let type = 'text'; // Default
+            let keyName = null;
+            let isValue = false;
+
+            // Check if it's a Key: Value pair
+            // Look back in gapText for pattern: word/underscore/dollar + optional space + colon
+            // We trim the end of gapText to check immediate preceding characters
+            const trimmedGap = gapText.trimEnd();
+            const keyMatch = trimmedGap.match(/([a-zA-Z_$][a-zA-Z0-9_$]*)\s*:\s*$/);
+
+            if (keyMatch) {
+                type = 'value';
+                keyName = keyMatch[1];
+                isValue = true;
+
+                // We need to remove the Key part from the preceding code node
+                // so it's not outputted twice when reconstructing.
+                // We modify the text of the last pushed 'code' part.
+                // But careful: gapText might contain comments or other stuff.
+                // Safest is to store the offset.
+                // Let's assume the key belongs to this string and strip it from the previous code part.
+                const stripLength = keyMatch[0].length;
+                if (parts.length > 0 && parts[parts.length-1].type === 'code') {
+                    const prevCode = parts[parts.length-1].text;
+                    parts[parts.length-1].text = prevCode.substring(0, prevCode.length - stripLength);
+                }
             } else {
-                cardsPerView = 3;
-            }
-        }
-
-        // ============================================
-        // ACCESSIBILITY FUNCTIONS
-        // ============================================
-
-        function toggleContrast() {
-            const body = document.body;
-            const btn = document.getElementById('btnContrast');
-            const isActive = body.classList.toggle('high-contrast');
-            btn.setAttribute('aria-pressed', isActive);
-            btn.classList.toggle('active', isActive);
-            localStorage.setItem('highContrast', isActive);
-        }
-
-        function toggleLargeText() {
-            const body = document.body;
-            const btn = document.getElementById('btnLargeText');
-            const isActive = body.classList.toggle('large-text');
-            btn.setAttribute('aria-pressed', isActive);
-            btn.classList.toggle('active', isActive);
-            localStorage.setItem('largeText', isActive);
-        }
-
-        function toggleEasyLanguage() {
-            const body = document.body;
-            const btn = document.getElementById('btnEasyLanguage');
-            const isActive = body.classList.toggle('easy-language');
-            btn.setAttribute('aria-pressed', isActive);
-            btn.classList.toggle('active', isActive);
-            localStorage.setItem('easyLanguage', isActive);
-        }
-
-        function loadAccessibilitySettings() {
-            if (localStorage.getItem('highContrast') === 'true') {
-                document.body.classList.add('high-contrast');
-                const btn = document.getElementById('btnContrast');
-                if (btn) {
-                    btn.setAttribute('aria-pressed', 'true');
-                    btn.classList.add('active');
+                // Not a value. Check if URL
+                if (content.startsWith('http://') || content.startsWith('https://')) {
+                    type = 'url';
                 }
             }
-            if (localStorage.getItem('largeText') === 'true') {
-                document.body.classList.add('large-text');
-                const btn = document.getElementById('btnLargeText');
-                if (btn) {
-                    btn.setAttribute('aria-pressed', 'true');
-                    btn.classList.add('active');
-                }
-            }
-            if (localStorage.getItem('easyLanguage') === 'true') {
-                document.body.classList.add('easy-language');
-                const btn = document.getElementById('btnEasyLanguage');
-                if (btn) {
-                    btn.setAttribute('aria-pressed', 'true');
-                    btn.classList.add('active');
-                }
-            }
-        }
 
-        // ============================================
-        // MOBILE MENU FUNCTIONS
-        // ============================================
-
-        function toggleMobileMenu() {
-            const mobileNav = document.getElementById('mobileNav');
-            const btn = document.querySelector('.mobile-menu-btn');
-
-            if (!mobileNav || !btn) return;
-
-            const isOpen = mobileNav.classList.toggle('open');
-            btn.setAttribute('aria-expanded', isOpen);
-        }
-
-        function closeMobileMenu() {
-            const mobileNav = document.getElementById('mobileNav');
-            const btn = document.querySelector('.mobile-menu-btn');
-
-            if (!mobileNav || !btn) return;
-
-            mobileNav.classList.remove('open');
-            btn.setAttribute('aria-expanded', 'false');
-        }
-
-        // ============================================
-        // SLIDER FUNCTIONS
-        // ============================================
-
-        function renderCards() {
-            const sliderTrack = document.getElementById('sliderTrack');
-            if (!sliderTrack) return;
-
-            sliderTrack.innerHTML = filteredData.map(item => `
-                <article class="card flex-shrink-0 w-full md:w-[calc(50%-10px)] lg:w-[calc(33.333%-14px)]" data-category="${item.category}">
-                    <div class="relative h-40 md:h-48 overflow-hidden">
-                        <img src="${item.image}" alt="${item.title}" class="w-full h-full object-cover transition-transform duration-500 hover:scale-110" loading="lazy">
-                    </div>
-                    <div class="p-4 md:p-6">
-                        <h3 class="font-display text-lg md:text-xl font-bold mb-2" style="color: var(--text-primary);">${item.title}</h3>
-                        <p class="text-xs md:text-sm mb-3" style="color: var(--text-muted);">${item.coach}</p>
-                        <div class="flex items-center justify-between mb-4">
-                            <span class="text-xl md:text-2xl font-bold" style="color: var(--accent-turquoise);">${item.price}</span>
-                            <span class="text-xs md:text-sm" style="color: var(--text-muted);">pro Stunde</span>
-                        </div>
-                        <button class="btn-primary w-full text-center text-sm md:text-base py-2 md:py-3">
-                            Mehr erfahren
-                        </button>
-                    </div>
-                </article>
-            `).join('');
-
-            updateSliderPosition();
-        }
-
-        function slide(direction) {
-            updateCardsPerView();
-            const maxSlide = Math.max(0, filteredData.length - cardsPerView);
-            currentSlide = Math.max(0, Math.min(currentSlide + direction, maxSlide));
-            updateSliderPosition();
-        }
-
-        function updateSliderPosition() {
-            const sliderTrack = document.getElementById('sliderTrack');
-            if (!sliderTrack) return;
-
-            const firstCard = sliderTrack.children[0];
-            if (!firstCard) return;
-
-            const cardWidth = firstCard.offsetWidth;
-            const gap = 20;
-            const offset = currentSlide * (cardWidth + gap);
-            sliderTrack.style.transform = `translateX(-${offset}px)`;
-        }
-
-        function filterCategory(category, element) {
-            currentFilter = category;
-            currentSlide = 0;
-
-            // Update active tab
-            document.querySelectorAll('.filter-tab').forEach(tab => {
-                tab.classList.remove('active');
-                tab.setAttribute('aria-selected', 'false');
-            });
-            element.classList.add('active');
-            element.setAttribute('aria-selected', 'true');
-
-            if (category === 'all') {
-                filteredData = [...coachingData];
-            } else {
-                filteredData = coachingData.filter(item => item.category === category);
-            }
-
-            renderCards();
-        }
-
-        // ============================================
-        // FAQ FUNCTIONS
-        // ============================================
-
-        function toggleFaq(button) {
-            const faqItem = button.closest('.faq-item');
-            if (!faqItem) return;
-
-            const isActive = faqItem.classList.contains('active');
-            const expanded = button.getAttribute('aria-expanded') === 'true';
-
-            // Close all other items
-            document.querySelectorAll('.faq-item').forEach(item => {
-                item.classList.remove('active');
-                const btn = item.querySelector('.faq-question');
-                if (btn) btn.setAttribute('aria-expanded', 'false');
-            });
-
-            // Toggle current item
-            if (!isActive) {
-                faqItem.classList.add('active');
-                button.setAttribute('aria-expanded', 'true');
-            }
-        }
-
-        // ============================================
-        // FORM HANDLING
-        // ============================================
-
-        function handleSubmit(event) {
-            event.preventDefault();
-
-            // Simple validation feedback
-            const form = event.target;
-            const formData = new FormData(form);
-
-            // In a real implementation, this would send data to a server
-            alert('Vielen Dank fuer Ihre Nachricht! Ich werde mich zeitnah bei Ihnen melden.');
-            form.reset();
-        }
-
-        // ============================================
-        // INTERSECTION OBSERVER FOR ANIMATIONS
-        // ============================================
-        function initScrollAnimations() {
-            // Check for reduced motion preference
-            if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-                document.querySelectorAll('.fade-in, .slide-in-left, .slide-in-right').forEach(el => {
-                    el.classList.add('visible');
-                });
-                return;
-            }
-
-            const observerOptions = {
-                threshold: 0.1,
-                rootMargin: '0px 0px -50px 0px'
+            // Create Match Object
+            const matchObj = {
+                type: type,
+                content: content,
+                quote: quote,
+                fullMatch: fullMatch,
+                colorGroup: braceDepth,
+                keyName: keyName
             };
 
-            const observer = new IntersectionObserver((entries) => {
-                entries.forEach(entry => {
-                    if (entry.isIntersecting) {
-                        entry.target.classList.add('visible');
-                    }
-                });
-            }, observerOptions);
-
-            document.querySelectorAll('.fade-in, .slide-in-left, .slide-in-right').forEach(el => {
-                observer.observe(el);
+            parts.push(matchObj);
+            scriptTextGroups.push({
+                scriptElement: script,
+                partRef: matchObj,
+                type: type,
+                keyName: keyName, // For display
+                displayText: content,
+                colorGroup: braceDepth
             });
+
+            lastIndex = stringRegex.lastIndex;
         }
 
-        // ============================================
-        // FAQ EVENT LISTENERS
-        // ============================================
-        function initFaq() {
-            document.querySelectorAll('.faq-question').forEach(button => {
-                button.addEventListener('click', () => toggleFaq(button));
-            });
-        }
+        // Remaining code after last string
+        if (lastIndex < code.length) parts.push({ type: 'code', text: code.substring(lastIndex) });
 
-        // ============================================
-        // RESIZE HANDLER
-        // ============================================
-        let resizeTimeout;
-        window.addEventListener('resize', () => {
-            clearTimeout(resizeTimeout);
-            resizeTimeout = setTimeout(() => {
-                updateCardsPerView();
-                updateSliderPosition();
-            }, 100);
+        if (parts.some(p => p.type !== 'code')) {
+            scriptDataMap.set(script, parts);
+        }
+      }
+    }
+
+    // Reconstruct Script
+    function rebuildScript(scriptEl) {
+      const parts = scriptDataMap.get(scriptEl);
+      if (!parts) return;
+
+      const newCode = parts.map(p => {
+        if (p.type === 'code') return p.text;
+        if (p.type === 'value') return `${p.keyName}: ${p.quote}${p.content}${p.quote}`;
+        // URL or Text
+        return `${p.quote}${p.content}${p.quote}`;
+      }).join('');
+
+      scriptEl.textContent = newCode;
+    }
+
+    // 3. URLs
+    function extractURLs() {
+      urlItems = [];
+      urlAttributes.forEach(urlDef => {
+        urlDef.tags.forEach(tagName => {
+          const elements = parsedDoc.getElementsByTagName(tagName);
+          for (let el of elements) {
+            const attrValue = el.getAttribute(urlDef.attr);
+            if (attrValue && attrValue.trim() && !attrValue.startsWith('javascript:') && !attrValue.startsWith('mailto:')) {
+              urlItems.push({
+                element: el, tagName: tagName, attr: urlDef.attr,
+                label: urlDef.label, value: attrValue, icon: urlDef.icon, id: `url-${urlItems.length}`
+              });
+            }
+          }
         });
+      });
+    }
 
-        // ============================================
-        // KEYBOARD NAVIGATION
-        // ============================================
-        document.addEventListener('keydown', (e) => {
-            // Close mobile menu on Escape
-            if (e.key === 'Escape') {
-                closeMobileMenu();
+    // Show Editor
+    function showEditor() {
+      inputSection.style.display = 'none';
+      editorSection.style.display = 'grid';
+      backButton.style.display = 'block';
+      searchContainer.classList.add('active');
+
+      statsBadge.style.display = 'inline-flex';
+      textCount.textContent = htmlTextGroups.length;
+      jsStatsBadge.style.display = scriptTextGroups.length > 0 ? 'inline-flex' : 'none';
+      jsCount.textContent = scriptTextGroups.length;
+      urlStatsBadge.style.display = urlItems.length > 0 ? 'inline-flex' : 'none';
+      urlCount.textContent = urlItems.length;
+
+      renderHTMLList();
+      renderScriptList();
+      renderURLList();
+      updateOutput();
+      searchInput.value = '';
+      searchMatches = [];
+      updateSearchCounter();
+    }
+
+    // Render HTML List
+    function renderHTMLList() {
+      textList.innerHTML = '';
+      if (htmlTextGroups.length === 0) {
+        textList.innerHTML = '<p class="text-sm text-[var(--fg-muted)] text-center py-4">Keine HTML-Texte gefunden.</p>';
+        return;
+      }
+      htmlTextGroups.forEach((group, index) => {
+        const div = document.createElement('div');
+        div.className = 'text-item p-4';
+        div.style.animationDelay = `${index * 30}ms`;
+        const lines = group.displayText.split('\n').length;
+        div.innerHTML = `
+          <div class="flex items-center justify-between mb-2">
+            <span class="tag-badge">${group.tagName}</span>
+            <span class="line-count">${lines} ${lines === 1 ? 'Zeile' : 'Zeilen'}</span>
+          </div>
+          <textarea data-type="html" data-index="${index}" placeholder="Text..." rows="1">${escapeHtml(group.displayText)}</textarea>
+        `;
+        const textarea = div.querySelector('textarea');
+        autoResize(textarea);
+        textarea.addEventListener('input', (e) => {
+          autoResize(e.target);
+          handleHTMLInput(index, e.target.value);
+          if(searchInput.value) performSearch(searchInput.value);
+        });
+        textarea.addEventListener('keydown', (e) => handleHTMLKeydown(e, index, textarea));
+        textList.appendChild(div);
+      });
+    }
+
+    function handleHTMLKeydown(e, index, textarea) {
+        const group = htmlTextGroups[index];
+        const isListItem = group.tagName === 'li';
+        if (e.key === 'Enter') {
+            if (isListItem) {
+                if (e.shiftKey) { /* Allow default BR */ }
+                else { e.preventDefault(); splitListItem(index, textarea); }
+            }
+        }
+    }
+
+    function splitListItem(index, textarea) {
+        const group = htmlTextGroups[index];
+        const cursorPos = textarea.selectionStart;
+        const textBefore = textarea.value.substring(0, cursorPos);
+        const textAfter = textarea.value.substring(cursorPos);
+
+        updateGroupContent(group, textBefore);
+        textarea.value = textBefore;
+
+        const currentLi = group.parent;
+        const newLi = parsedDoc.createElement('li');
+        const newTextNode = parsedDoc.createTextNode(textAfter);
+        newLi.appendChild(newTextNode);
+        currentLi.parentNode.insertBefore(newLi, currentLi.nextSibling);
+
+        const newGroup = {
+            type: 'html', nodes: [{ type: 'text', content: textAfter, node: newTextNode }],
+            tagName: 'li', parent: newLi, displayText: textAfter
+        };
+        htmlTextGroups.splice(index + 1, 0, newGroup);
+        renderHTMLList();
+        setTimeout(() => {
+            const newTextarea = textList.querySelector(`[data-index="${index + 1}"]`);
+            if (newTextarea) { newTextarea.focus(); newTextarea.selectionStart = 0; newTextarea.selectionEnd = 0; }
+            if(searchInput.value) performSearch(searchInput.value);
+        }, 50);
+        updateOutput();
+    }
+
+    function handleHTMLInput(index, value) {
+      const group = htmlTextGroups[index];
+      updateGroupContent(group, value);
+      updateOutput();
+    }
+
+    function updateGroupContent(group, value) {
+        const parent = group.parent;
+        const lastNode = group.nodes.length > 0 ? group.nodes[group.nodes.length - 1].node : null;
+        const nextSibling = lastNode ? lastNode.nextSibling : null;
+        group.nodes.forEach(n => { if (n.node && n.node.parentNode) n.node.parentNode.removeChild(n.node); });
+        const newNodes = [];
+        const parts = value.split('\n');
+        parts.forEach((part, i) => {
+            const textNode = parsedDoc.createTextNode(part);
+            parent.insertBefore(textNode, nextSibling);
+            newNodes.push({ type: 'text', content: part, node: textNode });
+            if (i < parts.length - 1) {
+                const brNode = parsedDoc.createElement('br');
+                parent.insertBefore(brNode, nextSibling);
+                newNodes.push({ type: 'br', node: brNode });
             }
         });
+        group.nodes = newNodes;
+        group.displayText = value;
+    }
 
-        // ============================================
-        // Image Swap Logic
-        // ============================================
-        function toggleImageSwap(element) {
-            element.classList.toggle('is-swapped');
-        }
-        function handleImageKeydown(event, element) {
-            if (event.key === 'Enter' || event.key === ' ') {
-                event.preventDefault();
-                toggleImageSwap(element);
-            }
+    // Render Script List
+    function renderScriptList() {
+      scriptList.innerHTML = '';
+      if (scriptTextGroups.length === 0) {
+        scriptList.innerHTML = '<p class="text-sm text-[var(--fg-muted)] text-center py-4">Keine Script-Inhalte gefunden.</p>';
+        return;
+      }
+
+      const groupColors = ['var(--group-color-1)', 'var(--group-color-2)', 'var(--group-color-3)', 'var(--group-color-4)', 'var(--group-color-5)'];
+
+      scriptTextGroups.forEach((group, index) => {
+        const div = document.createElement('div');
+        div.className = 'script-item p-4 pl-6'; // Padding left for bar
+
+        // Assign color based on group
+        const color = groupColors[group.colorGroup % groupColors.length];
+        div.style.setProperty('--item-color', color);
+
+        div.style.animationDelay = `${index * 30}ms`;
+
+        // Badge Logic
+        let badgeHtml = '';
+        let inputId = `script-${index}`;
+
+        if (group.type === 'value') {
+            // Static Key Badge
+            badgeHtml = `<span class="key-badge">${group.keyName}</span>`;
+        } else if (group.type === 'url') {
+            badgeHtml = `<span class="tag-badge" style="background: var(--accent-secondary); color: white;">URL</span>`;
+        } else {
+            badgeHtml = `<span class="tag-badge js-badge">Text</span>`;
         }
 
-        // ============================================
-        // INIT
-        // ============================================
-        document.addEventListener('DOMContentLoaded', () => {
-            loadAccessibilitySettings();
-            updateCardsPerView();
-            renderCards();
-            initScrollAnimations();
-            initFaq();
+        div.innerHTML = `
+          <div class="flex items-center gap-2 mb-2">
+            ${badgeHtml}
+          </div>
+          <textarea id="${inputId}" data-type="script" data-index="${index}" placeholder="Wert..." rows="3" class="mono text-sm">${escapeHtml(group.displayText)}</textarea>
+        `;
+
+        const textarea = div.querySelector('textarea');
+        textarea.addEventListener('input', (e) => {
+            // No autoResize if we use fixed rows, but let's allow it to grow
+            autoResize(e.target);
+            handleScriptInput(index, e.target.value);
+            if(searchInput.value) performSearch(searchInput.value);
         });
-    </script>
+
+        scriptList.appendChild(div);
+      });
+    }
+
+    function handleScriptInput(index, value) {
+      const group = scriptTextGroups[index];
+      group.partRef.content = value;
+      group.displayText = value;
+      rebuildScript(group.scriptElement);
+      updateOutput();
+    }
+
+    // Render URL List
+    function renderURLList() {
+      urlList.innerHTML = '';
+      if (urlItems.length === 0) {
+        urlList.innerHTML = '<p class="text-sm text-[var(--fg-muted)] text-center py-4">Keine URLs gefunden.</p>';
+        return;
+      }
+      urlItems.forEach((item, index) => {
+        const div = document.createElement('div');
+        div.className = 'url-item p-4';
+        div.style.animationDelay = `${index * 30}ms`;
+        const icon = getURLIcon(item.icon);
+        div.innerHTML = `
+          <div class="flex items-center justify-between mb-2">
+            <div class="flex items-center gap-2">${icon}<span class="url-badge">${item.label}</span></div>
+            <span class="attr-badge">${item.tagName}.${item.attr}</span>
+          </div>
+          <input type="text" data-url-index="${index}" value="${escapeHtml(item.value)}" placeholder="URL..." />
+        `;
+        div.querySelector('input').addEventListener('input', (e) => {
+          urlItems[index].value = e.target.value;
+          urlItems[index].element.setAttribute(item.attr, e.target.value);
+          updateOutput();
+          if(searchInput.value) performSearch(searchInput.value);
+        });
+        urlList.appendChild(div);
+      });
+    }
+
+    // Helpers
+    function updateOutput() {
+      if (!parsedDoc) return;
+      let output = parsedDoc.documentElement.outerHTML;
+      if (!hasHtmlWrapper && !hasHeadElement && !hasBodyElement) {
+        const bodyMatch = output.match(/<body[^>]*>([\s\S]*)<\/body>/i);
+        if (bodyMatch) output = bodyMatch[1].trim();
+      }
+      htmlOutput.value = output;
+    }
+
+    function autoResize(t) { t.style.height = 'auto'; t.style.height = Math.max(44, t.scrollHeight) + 'px'; }
+
+    function getURLIcon(type) {
+      const icons = {
+        link: '<svg class="url-type-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"/></svg>',
+        image: '<svg class="url-type-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>',
+        form: '<svg class="url-type-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>',
+        video: '<svg class="url-type-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg>',
+        data: '<svg class="url-type-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 7v10c0 2.21 3.582 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.582 4 8 4s8-1.79 8-4M4 7c0-2.21 3.582-4 8-4s8 1.79 8 4"/></svg>',
+        bg: '<svg class="url-type-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 5a1 1 0 011-1h14a1 1 0 011 1v2a1 1 0 01-1 1H5a1 1 0 01-1-1V5zM4 13a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H5a1 1 0 01-1-1v-6zM16 13a1 1 0 011-1h2a1 1 0 011 1v6a1 1 0 01-1 1h-2a1 1 0 01-1-1v-6z"/></svg>'
+      };
+      return icons[type] || icons.link;
+    }
+
+    function escapeHtml(text) {
+      const div = document.createElement('div');
+      div.textContent = text;
+      return div.innerHTML;
+    }
+
+    async function copyCode() {
+      try {
+        await navigator.clipboard.writeText(htmlOutput.value);
+        showToast();
+      } catch (err) {
+        htmlOutput.select();
+        document.execCommand('copy');
+        showToast();
+      }
+    }
+
+    function showToast() {
+      toast.classList.add('show');
+      setTimeout(() => toast.classList.remove('show'), 2000);
+    }
+
+    function resetEditor() {
+      inputSection.style.display = 'block';
+      editorSection.style.display = 'none';
+      backButton.style.display = 'none';
+      searchContainer.classList.remove('active');
+      statsBadge.style.display = 'none';
+      jsStatsBadge.style.display = 'none';
+      urlStatsBadge.style.display = 'none';
+      htmlTextGroups = [];
+      scriptTextGroups = [];
+      urlItems = [];
+      parsedDoc = null;
+      searchInput.value = '';
+    }
+
+    function loadExample() {
+      const example = `<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <title>Beispiel Seite</title>
+  <script>
+    // Konfiguration
+    const config = {
+      titel: 'Meine Webseite',
+      apiEndpoint: 'https://api.example.com/v1/data',
+      maxItems: 50,
+      benutzer: 'admin'
+    };
+
+    // Text Strings
+    const messages = [
+      "Willkommen zurück!",
+      "https://hilfe.meineseite.de/faq",
+      'Fehler beim Laden.'
+    ];
+
+    // Settings
+    let settings = { theme: 'dark', lang: 'de' };
+  </` + `script>
+</head>
+<body>
+  <header>
+    <h1>Willkommen</h1>
+    <nav>
+      <a href="https://google.com">Google Suche</a>
+    </nav>
+  </header>
+  <main>
+    <p>Dies ist ein Text mit einem<br>Zeilenumbruch.</p>
+    <ul>
+      <li>Erster Punkt</li>
+      <li>Zweiter Punkt</li>
+    </ul>
+  </main>
+</body>
+</html>`;
+      htmlInput.value = example;
+    }
+
+    document.addEventListener('keydown', (e) => {
+      if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') {
+        if (inputSection.style.display !== 'none') parseHTML();
+      }
+      if (e.key === 'Escape' && editorSection.style.display !== 'none') {
+        resetEditor();
+      }
+    });
+  </script>
 </body>
 </html>
