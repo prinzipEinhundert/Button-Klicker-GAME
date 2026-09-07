@@ -6,6 +6,7 @@ import {
   Flame,
   Lock,
   MousePointerClick,
+  Music2,
   PartyPopper,
   Pause,
   Play,
@@ -44,7 +45,9 @@ import {
   type HighscoreEntry,
 } from "@/lib/game/config";
 import { sound } from "@/lib/game/sound";
+import { music, loadMusicPref, persistMusicPref } from "@/lib/game/music";
 import { Fireworks, ParticleSystem } from "@/lib/game/particles";
+import BeatBackground from "./beat-background";
 
 /* ---------------- Konstanten ---------------- */
 
@@ -196,6 +199,32 @@ function ShopCard({
   );
 }
 
+/* ---------------- Musik-Toggle ---------------- */
+
+function MusicBtn({ on, onClick }: { on: boolean; onClick: () => void }) {
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      className="hud-btn relative rounded-2xl p-2.5"
+      aria-label={on ? "Musik ausschalten" : "Musik einschalten"}
+      aria-pressed={on}
+    >
+      <Music2
+        className={`h-8 w-8 transition-colors ${
+          on ? "text-white" : "text-white/35"
+        }`}
+      />
+      {!on && (
+        <span
+          aria-hidden
+          className="absolute left-1/2 top-1/2 h-[3px] w-8 -translate-x-1/2 -translate-y-1/2 -rotate-45 rounded-full bg-rose-400/90 shadow-[0_0_8px_rgba(255,80,110,0.8)]"
+        />
+      )}
+    </button>
+  );
+}
+
 /* ---------------- Hauptkomponente ---------------- */
 
 export default function RingRush() {
@@ -209,6 +238,7 @@ export default function RingRush() {
   const [phoenixEverUsed, setPhoenixEverUsed] = useState(false);
   const [happyEnd, setHappyEnd] = useState(false);
   const [soundOn, setSoundOn] = useState(true);
+  const [musicOn, setMusicOn] = useState(true);
   const [highscores, setHighscores] = useState<HighscoreEntry[]>([]);
   const [happyTime, setHappyTime] = useState(0);
   const [lastName, setLastName] = useState("");
@@ -308,6 +338,9 @@ export default function RingRush() {
       setPhoenixEverUsed(s.phoenixEverUsed);
       setHappyEnd(s.happyEnd);
       setSoundOn(s.soundOn);
+      const mPref = loadMusicPref();
+      setMusicOn(mPref);
+      music.setEnabled(mPref);
       setHighscores(loadHighscores());
       setLastName(loadLastName());
       remainingRef.current = maxTimeFor(s.timeLevel);
@@ -346,6 +379,17 @@ export default function RingRush() {
     sound.setMuted(!soundOn);
   }, [soundOn]);
 
+  /* Musik: beim ersten User-Gesture entriegeln (Autoplay-Policy) */
+  useEffect(() => {
+    const unlock = () => void music.unlock();
+    window.addEventListener("pointerdown", unlock, { once: true });
+    window.addEventListener("keydown", unlock, { once: true });
+    return () => {
+      window.removeEventListener("pointerdown", unlock);
+      window.removeEventListener("keydown", unlock);
+    };
+  }, []);
+
   /* ---------------- Hilfsfunktionen ---------------- */
 
   const btnCenter = () => {
@@ -368,6 +412,14 @@ export default function RingRush() {
     setFlashKind(kind);
     setFlashKey((k) => k + 1);
     window.setTimeout(() => setFlashKind(null), 750);
+  };
+
+  const toggleMusic = () => {
+    const next = !musicOn;
+    setMusicOn(next);
+    music.setEnabled(next);
+    persistMusicPref(next);
+    if (next) void music.unlock();
   };
 
   const cancelHoldState = () => {
@@ -445,6 +497,15 @@ export default function RingRush() {
     triggerFlash("red");
     setShake(true);
     window.setTimeout(() => setShake(false), 600);
+    /* Der Ring zerspringt: Funkenwolke beim Verlust */
+    const c = btnCenter();
+    psRef.current?.burst(
+      c.x,
+      c.y,
+      ["#ff2d55", "#ff5e00", "#ffffff", "#ff2fb3"],
+      80,
+      1.5
+    );
     sound.play("fail");
     window.setTimeout(() => sound.play("gameover"), 380);
   };
@@ -765,6 +826,28 @@ export default function RingRush() {
       if (wrapRef.current) {
         wrapRef.current.style.setProperty("--ring-glow", color);
         wrapRef.current.classList.toggle("danger", running && progress < 0.25);
+        /* Zittern + Funken: je leerer der Ring, desto nervöser wird er */
+        const urgent = running ? Math.max(0, (0.3 - progress) / 0.3) : 0;
+        if (urgent > 0) {
+          const s = urgent * urgent * 3.6;
+          const jx = ((Math.random() * 2 - 1) * s).toFixed(2);
+          const jy = ((Math.random() * 2 - 1) * s).toFixed(2);
+          const jr = ((Math.random() * 2 - 1) * urgent * 0.6).toFixed(3);
+          wrapRef.current.style.transform = `translate(${jx}px, ${jy}px) rotate(${jr}deg)`;
+          const r = btnRef.current?.getBoundingClientRect();
+          if (r && psRef.current) {
+            psRef.current.ringEmit(
+              r.left + r.width / 2,
+              r.top + r.height / 2,
+              r.width / 2 + 2,
+              color,
+              urgent,
+              dt
+            );
+          }
+        } else if (wrapRef.current.style.transform) {
+          wrapRef.current.style.transform = "";
+        }
       }
       const base = Math.max(0, Math.min(100, Math.floor(elapsedPct)));
       if (pctRef.current) {
@@ -859,6 +942,9 @@ export default function RingRush() {
         }}
       />
 
+      {/* Taktsync-Hintergrund: Sterne, Blasen, Schockwellen */}
+      <BeatBackground />
+
       {/* Overdrive-Vignette */}
       <div
         ref={vignetteRef}
@@ -916,6 +1002,7 @@ export default function RingRush() {
                 <span className="pulse-dot absolute -right-0.5 -top-0.5 h-3 w-3 rounded-full bg-[#ffd23f]" />
               )}
             </button>
+            <MusicBtn on={musicOn} onClick={toggleMusic} />
             <button
               type="button"
               onClick={() => setSoundOn((s) => !s)}
@@ -930,6 +1017,13 @@ export default function RingRush() {
             </button>
           </div>
         </header>
+      )}
+
+      {/* Musik-Toggle auf dem Startbildschirm (HUD ist dort ausgeblendet) */}
+      {phase === "idle" && (
+        <div className="absolute right-3 top-3 z-30">
+          <MusicBtn on={musicOn} onClick={toggleMusic} />
+        </div>
       )}
 
       {/* Zentrale Spielfläche */}
@@ -1549,7 +1643,7 @@ export default function RingRush() {
 
       {/* Credits */}
       <div className="pointer-events-none absolute bottom-1.5 right-3 z-10 text-[9px] text-white/25">
-        SFX: mixkit.co · Grafik: KI-generiert
+        SFX: mixkit.co · Musik: eigener Chiptune-Loop · Grafik: KI-generiert
       </div>
     </div>
   );

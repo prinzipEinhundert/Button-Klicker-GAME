@@ -19,6 +19,7 @@ export class ParticleSystem {
   private parts: Particle[] = [];
   private w = 0;
   private h = 0;
+  private emitAcc = 0; // Fraktions-Akkumulator für Dauer-Emitter
 
   constructor(private canvas: HTMLCanvasElement) {
     const ctx = canvas.getContext("2d");
@@ -57,7 +58,46 @@ export class ParticleSystem {
 
   clear(): void {
     this.parts = [];
+    this.emitAcc = 0;
     this.ctx.clearRect(0, 0, this.w, this.h);
+  }
+
+  /**
+   * Dauer-Emitter: Funken sprühen am Ringumfang nach außen — für das
+   * Zittern/Ausfunkten, wenn der Timer zu laufen droht.
+   * urgency 0..1 steuert Dichte, Tempo und Streuung; dt in Millisekunden.
+   */
+  ringEmit(
+    cx: number,
+    cy: number,
+    radius: number,
+    color: string,
+    urgency: number,
+    dtMs: number
+  ): void {
+    const rate = 6 + urgency * 34; // Funken pro Sekunde
+    this.emitAcc += (Math.min(dtMs, 100) / 1000) * rate;
+    const n = Math.floor(this.emitAcc);
+    if (n <= 0) return;
+    this.emitAcc -= n;
+    for (let i = 0; i < n; i++) {
+      const a = Math.random() * Math.PI * 2;
+      const sp = (30 + Math.random() * 110) * (0.55 + urgency * 0.8);
+      const max = 380 + Math.random() * 420;
+      this.parts.push({
+        x: cx + Math.cos(a) * radius,
+        y: cy + Math.sin(a) * radius,
+        vx: Math.cos(a) * sp + (Math.random() - 0.5) * 50,
+        vy: Math.sin(a) * sp + (Math.random() - 0.5) * 50 - 30,
+        life: max,
+        max,
+        size: 1 + Math.random() * 2.1,
+        color: Math.random() < 0.3 ? "#ffffff" : color,
+      });
+    }
+    if (this.parts.length > 600) {
+      this.parts.splice(0, this.parts.length - 600);
+    }
   }
 
   /** Pro Frame aufrufen; dt in Millisekunden. */
