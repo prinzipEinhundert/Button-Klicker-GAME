@@ -1,0 +1,297 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ArtistGPT — Digital Atelier</title>
+<style>
+:root{
+  --bg:#171817;--panel:#222320;--panel2:#292a26;--line:#41413a;--text:#f1eee5;
+  --muted:#aaa99e;--gold:#c9ad70;--gold2:#f0d9a0;--green:#9ab6a1;--danger:#d18d83;
+  --shadow:0 18px 45px #0005;--radius:22px;
+}
+*{box-sizing:border-box}
+body{margin:0;background:radial-gradient(ellipse at 15% 0%,#5c4e302b,transparent 34%),radial-gradient(ellipse at 90% 30%,#8a78501b,transparent 35%),linear-gradient(135deg,#171817,#20211e 55%,#171817);color:var(--text);font:14px/1.45 system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;min-height:100vh}
+button,input,select,textarea{font:inherit}
+button{cursor:pointer;color:var(--text);border:1px solid #555044;background:linear-gradient(135deg,#3a3830,#282923);padding:10px 14px;border-radius:13px;transition:.18s ease;box-shadow:0 5px 12px #0002}
+button:hover{border-color:var(--gold);transform:translateY(-1px)}
+button.primary{background:linear-gradient(135deg,#e2c887,#ad8d4e);color:#211f18;border:0;font-weight:700}
+button.ghost{background:#ffffff08;box-shadow:none}
+button.danger{border-color:#704740;color:#f0b4aa}
+input,select,textarea{background:#171916;color:var(--text);border:1px solid #4a4a41;border-radius:11px;padding:9px 10px;min-width:0;width:100%;outline:none}
+input:focus,select:focus,textarea:focus{border-color:var(--gold);box-shadow:0 0 0 3px #c9ad7022}
+label{display:block;color:var(--muted);font-size:12px;margin:0 0 5px}
+h1,h2,h3,p{margin-top:0}h1{font-size:23px;letter-spacing:-.6px;margin-bottom:4px}h2{font-size:15px;margin-bottom:12px}h3{font-size:13px;margin-bottom:8px}
+small,.muted{color:var(--muted)}
+header{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:20px clamp(14px,3vw,36px);border-bottom:1px solid #ffffff12;position:sticky;top:0;z-index:5;background:#191a17d9;backdrop-filter:blur(18px)}
+.brand{display:flex;align-items:center;gap:13px}.mark{width:43px;height:43px;border-radius:15px;background:linear-gradient(145deg,#f1d99c,#8d713b);display:grid;place-items:center;color:#252219;font-size:22px;box-shadow:0 8px 22px #c9ad7026}
+.brand p{margin:0;color:var(--muted);font-size:12px}.header-actions{display:flex;align-items:center;gap:9px;flex-wrap:wrap;justify-content:flex-end}
+.status{display:flex;align-items:center;gap:8px;border:1px solid var(--line);border-radius:999px;padding:8px 12px;background:#ffffff05;color:var(--muted);font-size:12px}.dot{width:8px;height:8px;border-radius:50%;background:#85857a}.dot.on{background:#9ec6a7;box-shadow:0 0 12px #9ec6a788}
+main{padding:24px clamp(12px,2.5vw,30px) 36px;max-width:1800px;margin:auto}
+.hero{display:flex;align-items:flex-end;justify-content:space-between;gap:20px;margin-bottom:20px}.eyebrow{color:var(--gold2);text-transform:uppercase;letter-spacing:2px;font-size:10px;font-weight:700;margin-bottom:8px}.hero p{color:var(--muted);margin-bottom:0;max-width:650px}.hero-note{color:#d9c89e;border-left:2px solid var(--gold);padding:8px 0 8px 12px;max-width:250px;font-size:12px}
+.layout{display:grid;grid-template-columns:minmax(0,1.55fr) minmax(310px,.85fr);gap:18px;align-items:start}
+.card{background:linear-gradient(145deg,#292a26f2,#20211ef5);border:1px solid #ffffff12;border-radius:var(--radius);box-shadow:var(--shadow);overflow:hidden}
+.card-head{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:17px 18px 13px;border-bottom:1px solid #ffffff0d}.card-head p{margin:3px 0 0;color:var(--muted);font-size:12px}
+.canvas-wrap{padding:16px;background:radial-gradient(ellipse at 50% 0%,#c9ad7010,transparent 70%)}
+.canvas-top{display:flex;justify-content:space-between;gap:10px;align-items:center;flex-wrap:wrap;margin-bottom:12px}
+.toolset{display:flex;gap:6px;flex-wrap:wrap}.tool{padding:8px 10px;font-size:12px;background:#181a17;border-color:#393a32}.tool.active{border-color:var(--gold);color:var(--gold2);background:#c9ad7014}
+.zoom-control{display:flex;align-items:center;gap:9px;color:var(--muted);font-size:12px}.zoom-control input{width:115px;padding:0;accent-color:var(--gold)}
+.canvas-stage{position:relative;border:1px solid #555044;border-radius:17px;overflow:auto;background:#151613;min-height:300px;max-height:68vh;display:flex;align-items:center;justify-content:center}
+canvas{display:block;max-width:none;background:#f6f3eb;border-radius:3px;box-shadow:0 8px 30px #0005;touch-action:manipulation}
+.canvas-foot{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;margin-top:11px;color:var(--muted);font-size:11px}
+.sidebar{display:grid;gap:16px}.section-body{padding:16px 18px 18px}.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}.form-grid .full{grid-column:1/-1}.row{display:flex;gap:8px;align-items:center}.row>*{flex:1}
+.inline-form{display:grid;grid-template-columns:1fr 1fr auto;gap:8px;align-items:end}.list{display:grid;gap:7px;margin-top:12px;max-height:220px;overflow:auto}
+.item{border:1px solid #ffffff12;background:#ffffff04;border-radius:12px;padding:10px;display:flex;justify-content:space-between;gap:10px;align-items:center}.item strong{display:block;font-size:12px}.item small{font-size:11px;overflow-wrap:anywhere}.item button{padding:5px 8px;font-size:11px;box-shadow:none}
+.badge{font-size:10px;border-radius:99px;padding:4px 7px;background:#c9ad7019;color:var(--gold2);border:1px solid #c9ad7033}
+.empty{padding:18px;text-align:center;border:1px dashed #ffffff20;border-radius:12px;color:var(--muted);font-size:12px}
+.color-preview{width:35px;height:35px;border-radius:10px;border:1px solid #ffffff40;flex:0 0 auto}
+.switchline{display:flex;justify-content:space-between;align-items:center;gap:12px}.switch{appearance:none;width:42px;height:24px;border-radius:99px;background:#4a4a42;position:relative;cursor:pointer;border:1px solid #666457;flex:0 0 auto}.switch:before{content:"";position:absolute;width:18px;height:18px;border-radius:50%;top:2px;left:2px;background:#d7d3c8;transition:.2s}.switch:checked{background:#8c7544;border-color:#d7bd7b}.switch:checked:before{left:20px;background:#fff2c9}
+.notice{border:1px solid #c9ad7033;background:linear-gradient(135deg,#c9ad7010,#ffffff03);border-radius:13px;padding:11px 12px;color:#d8cfb7;font-size:12px;margin-top:12px}
+.mcp-tools{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-top:12px}.mcp-tool{font-size:11px;color:#d4d0c4;border:1px solid #ffffff10;background:#ffffff04;border-radius:10px;padding:8px}
+footer{padding:0 4px;margin-top:18px;color:#89897e;font-size:11px;display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.toast{position:fixed;bottom:18px;left:50%;transform:translate(-50%,20px);opacity:0;pointer-events:none;z-index:10;background:#ede0bd;color:#27251e;padding:11px 16px;border-radius:12px;box-shadow:var(--shadow);transition:.25s}.toast.show{opacity:1;transform:translate(-50%,0)}
+@media(max-width:900px){.layout{grid-template-columns:1fr}.hero{align-items:flex-start;flex-direction:column}.hero-note{max-width:none}.canvas-stage{max-height:60vh}header{position:relative}.sidebar{grid-template-columns:1fr}}
+@media(max-width:540px){.brand p{display:none}.header-actions{gap:5px}.status{padding:7px 9px}.header-actions button{padding:8px 10px}.form-grid{grid-template-columns:1fr 1fr}.inline-form{grid-template-columns:1fr 1fr}.inline-form button{grid-column:1/-1}.card-head{padding:14px}.section-body{padding:14px}.canvas-wrap{padding:10px}}
+</style>
+</head>
+<body>
+<header>
+  <div class="brand"><div class="mark">✦</div><div><h1>ArtistGPT</h1><p>Digital Atelier · mathematische Kunst</p></div></div>
+  <div class="header-actions">
+    <div class="status"><span id="statusDot" class="dot"></span><span id="serverStatus">MCP-Bridge nicht verbunden</span></div>
+    <button class="ghost" id="saveProjectBtn">Projekt exportieren</button>
+    <button class="primary" id="downloadBtn">↓ Bild herunterladen</button>
+  </div>
+</header>
+<main>
+  <section class="hero">
+    <div><div class="eyebrow">Creative computation / 001</div><h1>Die Staffelei für algorithmische Kunst.</h1><p>Variablen werden zu Koordinaten, Koordinaten zu Formen und Formen zu einem eigenen Bild. Änderungen an Formeln aktualisieren abhängige Objekte automatisch.</p></div>
+    <div class="hero-note">100 Variablen · 1000 × 1000 Einheiten<br>Goldene Akzente · lokaler Export</div>
+  </section>
+  <div class="layout">
+    <section class="card">
+      <div class="card-head"><div><h2>Leinwand</h2><p>Mathematischer Raum · 1000 × 1000</p></div><span class="badge" id="objectCount">0 Objekte</span></div>
+      <div class="canvas-wrap">
+        <div class="canvas-top">
+          <div class="toolset">
+            <button class="tool active" data-tool="select">Auswählen</button><button class="tool" data-tool="point">Punkt setzen</button><button class="tool" data-tool="line">Linie zeichnen</button><button class="tool" data-tool="polygon">Fläche zeichnen</button>
+          </div>
+          <div class="zoom-control"><span>Zoom</span><input id="zoom" type="range" min="10" max="100" value="60"><strong id="zoomLabel">60 %</strong></div>
+        </div>
+        <div class="canvas-stage" id="canvasStage"><canvas id="artCanvas" width="600" height="600" aria-label="Zeichenfläche"></canvas></div>
+        <div class="canvas-foot"><span id="canvasHint">Auswählen: Objekt anklicken. Punkt setzen: auf die Leinwand tippen.</span><span id="coordReadout">x: — · y: —</span></div>
+      </div>
+    </section>
+    <aside class="sidebar">
+      <section class="card">
+        <div class="card-head"><div><h2>Variablen</h2><p>Werte und Formeln · maximal 100</p></div><span class="badge" id="variableCount">0 / 100</span></div>
+        <div class="section-body">
+          <div class="inline-form"><div><label for="varName">Name</label><input id="varName" placeholder="z. B. a"></div><div><label for="varExpression">Wert / Formel</label><input id="varExpression" placeholder="3 oder a + b"></div><button class="primary" id="addVariableBtn">Hinzufügen</button></div>
+          <div class="notice">Formeln unterstützen +, −, ×, ÷, Klammern und Potenzen. Namen dürfen Buchstaben, Ziffern und Unterstriche enthalten.</div>
+          <div id="variableList" class="list"><div class="empty">Noch keine Variablen angelegt.</div></div>
+        </div>
+      </section>
+      <section class="card">
+        <div class="card-head"><div><h2>Geometrie</h2><p>Punkte, Linien und gefüllte Flächen</p></div><span class="badge" id="geometryCount">0</span></div>
+        <div class="section-body">
+          <div class="form-grid">
+            <div><label for="pointName">Punktname</label><input id="pointName" placeholder="P1"></div>
+            <div><label for="pointX">X · Variable oder Zahl</label><input id="pointX" placeholder="a"></div>
+            <div><label for="pointY">Y · Variable oder Zahl</label><input id="pointY" placeholder="b"></div>
+            <div class="full row"><button id="createPointBtn" class="primary">Punkt erstellen</button><button id="createLineBtn">Linie zwischen letzten 2 Punkten</button></div>
+          </div>
+          <div class="list" id="objectList"><div class="empty">Noch keine Objekte. Punkte können auch direkt auf der Leinwand gesetzt werden.</div></div>
+        </div>
+      </section>
+      <section class="card">
+        <div class="card-head"><div><h2>Farbatelier</h2><p>HEX / RGBA mit Transparenz</p></div><div class="color-preview" id="colorPreview"></div></div>
+        <div class="section-body">
+          <div class="form-grid">
+            <div><label for="fillColor">Füllfarbe (HEX)</label><input id="fillColor" value="#C9AD70CC" placeholder="#RRGGBBAA"></div>
+            <div><label for="lineColor">Linienfarbe (HEX)</label><input id="lineColor" value="#4B4230FF" placeholder="#RRGGBBAA"></div>
+            <div><label for="polygonName">Flächenname</label><input id="polygonName" value="Fläche 1"></div>
+            <div><label for="polygonPoints">Punkte (Komma getrennt)</label><input id="polygonPoints" placeholder="P1, P2, P3"></div>
+            <div class="full"><button id="createPolygonBtn" class="primary" style="width:100%">Geschlossene Fläche erstellen</button></div>
+            <div class="full"><button id="applyColorBtn" style="width:100%">Farbe auf ausgewählte Fläche anwenden</button></div>
+          </div>
+          <p class="muted" style="font-size:11px;margin:10px 0 0">Alpha-Kanal: 00 = transparent, FF = deckend. Beispiel: #C9AD7080 ≈ 50 % Deckkraft.</p>
+        </div>
+      </section>
+      <section class="card">
+        <div class="card-head"><div><h2>MCP-Verbindung</h2><p>Verbindungsstatus und Serversteuerung</p></div><span class="badge">HTTP</span></div>
+        <div class="section-body">
+          <div class="switchline"><div><strong>Server aktiv</strong><div class="muted" style="font-size:11px;margin-top:3px">Schaltet die MCP-Bridge frei, sofern sie installiert ist.</div></div><input id="serverToggle" type="checkbox" class="switch" checked aria-label="Server aktiv"></div>
+          <div style="margin-top:13px"><label for="mcpEndpoint">MCP-Endpunkt (Bridge)</label><input id="mcpEndpoint" value="http://127.0.0.1:18789/mcp"></div>
+          <div class="row" style="margin-top:9px"><button id="checkBridgeBtn">Verbindung prüfen</button><button id="copyEndpointBtn">Adresse kopieren</button></div>
+          <div id="bridgeMessage" class="notice">Eine HTML-Datei kann selbst keinen Netzwerkserver auf einem Port öffnen. Für echte MCP-Aufrufe wird eine lokale Bridge oder ein erreichbarer MCP-Host benötigt.</div>
+          <div class="mcp-tools">
+            <div class="mcp-tool">get_sandbox_status</div><div class="mcp-tool">list_variables</div>
+            <div class="mcp-tool">create_variable</div><div class="mcp-tool">update_variable</div>
+            <div class="mcp-tool">create_point</div><div class="mcp-tool">create_line</div>
+            <div class="mcp-tool">create_polygon</div><div class="mcp-tool">export_image</div>
+          </div>
+        </div>
+      </section>
+    </aside>
+  </div>
+  <footer><span>ArtistGPT · lokales Kreativprojekt</span><span>Projektdaten verbleiben im Browser, bis sie exportiert werden.</span></footer>
+</main>
+<div class="toast" id="toast"></div>
+<script>
+(() => {
+  "use strict";
+  const state = {variables:{}, points:[], lines:[], polygons:[], selected:null, tool:"select", zoom:60, serverActive:true, nextId:1};
+  const $ = id => document.getElementById(id);
+  const canvas = $("artCanvas"), ctx = canvas.getContext("2d");
+  const objectById = id => [...state.points,...state.lines,...state.polygons].find(o=>o.id===id);
+  const allObjects = () => [...state.points,...state.lines,...state.polygons];
+  const toast = message => { const el=$("toast"); el.textContent=message; el.classList.add("show"); clearTimeout(toast.timer); toast.timer=setTimeout(()=>el.classList.remove("show"),2600); };
+  const escapeHtml = s => String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+  function tokenize(expr){
+    const tokens=[]; const re=/\s*(?:(\d+(?:\.\d*)?|\.\d+)|([A-Za-z_][A-Za-z0-9_]*)|(\*\*|[+\-*/^()]))/gy; let pos=0;
+    while(pos<expr.length){ re.lastIndex=pos; const m=re.exec(expr); if(!m) throw Error("Ungültiges Zeichen in Formel: "+expr.slice(pos,pos+1)); tokens.push(m[1]!==undefined?{type:"number",value:Number(m[1])}:m[2]!==undefined?{type:"name",value:m[2]}:{type:"op",value:m[3]}); pos=re.lastIndex; }
+    return tokens;
+  }
+  function evaluateExpression(expression, stack=[]){
+    const tokens=tokenize(String(expression)); let i=0;
+    function primary(){
+      const t=tokens[i++]; if(!t) throw Error("Formel unvollständig");
+      if(t.type==="number") return t.value;
+      if(t.type==="name"){
+        if(!(t.value in state.variables)) throw Error("Unbekannte Variable: "+t.value);
+        if(stack.includes(t.value)) throw Error("Zyklische Abhängigkeit: "+[...stack,t.value].join(" → "));
+        return evaluateExpression(state.variables[t.value].expression,[...stack,t.value]);
+      }
+      if(t.value==="+"||t.value==="-"){const n=primary();return t.value==="-"?-n:n;}
+      if(t.value==="("){const v=add();if(!tokens[i]||tokens[i++].value!==")")throw Error("Schließende Klammer fehlt");return v;}
+      throw Error("Unerwartetes Zeichen: "+t.value);
+    }
+    function power(){let v=primary();if(tokens[i]&&(tokens[i].value==="^"||tokens[i].value==="**")){i++;v=Math.pow(v,unary());}return v;}
+    function unary(){if(tokens[i]&&(tokens[i].value==="+"||tokens[i].value==="-"))return primary();return power();}
+    function mul(){let v=unary();while(tokens[i]&&["*","/"].includes(tokens[i].value)){const op=tokens[i++].value;const r=unary();if(op==="/"&&r===0)throw Error("Division durch null");v=op==="*"?v*r:v/r;}return v;}
+    function add(){let v=mul();while(tokens[i]&&["+","-"].includes(tokens[i].value)){const op=tokens[i++].value;const r=mul();v=op==="+"?v+r:v-r;}return v;}
+    const result=add(); if(i!==tokens.length)throw Error("Formel konnte nicht vollständig ausgewertet werden"); if(!Number.isFinite(result))throw Error("Ergebnis ist keine endliche Zahl"); return result;
+  }
+  function resolve(value){const s=String(value).trim();if(!s)throw Error("Wert fehlt");return evaluateExpression(s);}
+  function colorToCss(value){
+    let h=String(value).trim().replace(/^#/,"");
+    if(h.length===3||h.length===4)h=[...h].map(c=>c+c).join("");
+    if(h.length===6)h+="FF";
+    if(!/^[0-9a-fA-F]{8}$/.test(h))throw Error("HEX-Farbe muss #RGB, #RGBA, #RRGGBB oder #RRGGBBAA sein");
+    return `rgba(${parseInt(h.slice(0,2),16)},${parseInt(h.slice(2,4),16)},${parseInt(h.slice(4,6),16)},${parseInt(h.slice(6,8),16)/255})`;
+  }
+  function rgbaHex(value){let h=value.replace("#","");if(h.length===6)h+="FF";return h.toUpperCase();}
+  function getPoint(name){const p=state.points.find(x=>x.name===name);if(!p)throw Error("Punkt nicht gefunden: "+name);return p;}
+  function pointValue(p){return {x:resolve(p.xExpression),y:resolve(p.yExpression)};}
+  function validateCoordinate(n){if(n<0||n>1000)throw Error("Koordinaten müssen zwischen 0 und 1000 liegen");return n;}
+  function draw(){
+    const size=Math.max(100,Math.round(1000*state.zoom/100)); canvas.width=size;canvas.height=size;ctx.clearRect(0,0,size,size);
+    ctx.fillStyle="#F6F3EB";ctx.fillRect(0,0,size,size);
+    ctx.save();ctx.strokeStyle="#d9d3c3";ctx.lineWidth=Math.max(.5,size/1000*.6);
+    for(let n=0;n<=1000;n+=50){const p=n/1000*size;ctx.beginPath();ctx.moveTo(p,0);ctx.lineTo(p,size);ctx.stroke();ctx.beginPath();ctx.moveTo(0,p);ctx.lineTo(size,p);ctx.stroke();}
+    ctx.strokeStyle="#c5bca6";ctx.lineWidth=Math.max(1,size/1000);ctx.beginPath();ctx.moveTo(0,0);ctx.lineTo(size,0);ctx.lineTo(size,size);ctx.lineTo(0,size);ctx.closePath();ctx.stroke();ctx.restore();
+    for(const poly of state.polygons){try{const pts=poly.pointNames.map(n=>{const p=pointValue(getPoint(n));return {x:p.x/1000*size,y:p.y/1000*size};});if(pts.length<3)continue;ctx.beginPath();pts.forEach((p,i)=>i?ctx.lineTo(p.x,p.y):ctx.moveTo(p.x,p.y));ctx.closePath();ctx.fillStyle=colorToCss(poly.fill);ctx.fill();ctx.strokeStyle=colorToCss(poly.stroke);ctx.lineWidth=Math.max(1,size/1000*2);ctx.stroke();if(state.selected===poly.id){ctx.setLineDash([5,4]);ctx.strokeStyle="#9a7532";ctx.lineWidth=2;ctx.stroke();ctx.setLineDash([]);}}catch(e){}}
+    for(const line of state.lines){try{const a=pointValue(getPoint(line.startName)),b=pointValue(getPoint(line.endName));ctx.beginPath();ctx.moveTo(a.x/1000*size,a.y/1000*size);ctx.lineTo(b.x/1000*size,b.y/1000*size);ctx.strokeStyle=line.color||"#4B4230FF";ctx.lineWidth=Math.max(1.5,size/1000*3);ctx.stroke();if(state.selected===line.id){ctx.strokeStyle="#bd984e";ctx.lineWidth=4;ctx.stroke();}}catch(e){}}
+    for(const p of state.points){try{const v=pointValue(p),x=v.x/1000*size,y=v.y/1000*size;ctx.beginPath();ctx.arc(x,y,Math.max(3.5,size/1000*6),0,Math.PI*2);ctx.fillStyle=state.selected===p.id?"#b38b42":"#403b2e";ctx.fill();ctx.strokeStyle="#fffaf0";ctx.lineWidth=1.5;ctx.stroke();ctx.font=`${Math.max(10,size/1000*17)}px system-ui`;ctx.fillStyle="#29271f";ctx.fillText(p.name,x+7,y-7);}catch(e){}}
+    $("objectCount").textContent=allObjects().length+" Objekte";$("geometryCount").textContent=allObjects().length;
+  }
+  function renderVariables(){
+    const entries=Object.entries(state.variables);$("variableCount").textContent=entries.length+" / 100";
+    $("variableList").innerHTML=entries.length?entries.map(([name,v])=>{let result;try{result=resolve(name)}catch(e){result="Fehler"}return `<div class="item"><div><strong>${escapeHtml(name)} <span class="muted">= ${escapeHtml(result)}</span></strong><small>${escapeHtml(v.expression)}</small></div><button class="danger" data-delete-variable="${escapeHtml(name)}">Löschen</button></div>`}).join(""):'<div class="empty">Noch keine Variablen angelegt.</div>';
+    $("variableList").querySelectorAll("[data-delete-variable]").forEach(b=>b.onclick=()=>deleteVariable(b.dataset.deleteVariable));
+  }
+  function renderObjects(){
+    const objs=allObjects();$("objectList").innerHTML=objs.length?objs.map(o=>`<div class="item"><div><strong>${escapeHtml(o.name)} <span class="badge">${escapeHtml(o.type)}</span></strong><small>${escapeHtml(describeObject(o))}</small></div><div class="row" style="flex:0 0 auto"><button data-select="${o.id}">Wählen</button><button class="danger" data-delete-object="${o.id}">×</button></div></div>`).join(""):'<div class="empty">Noch keine Objekte. Punkte können auch direkt auf der Leinwand gesetzt werden.</div>';
+    $("objectList").querySelectorAll("[data-select]").forEach(b=>b.onclick=()=>{state.selected=Number(b.dataset.select);draw();});
+    $("objectList").querySelectorAll("[data-delete-object]").forEach(b=>b.onclick=()=>deleteObject(Number(b.dataset.deleteObject)));
+  }
+  function describeObject(o){if(o.type==="Punkt"){try{const v=pointValue(o);return `x=${v.x}, y=${v.y} · ${o.xExpression}, ${o.yExpression}`}catch(e){return o.xExpression+", "+o.yExpression}}if(o.type==="Linie")return o.startName+" → "+o.endName;return o.pointNames.join(" → ");}
+  function refresh(){renderVariables();renderObjects();draw();$("colorPreview").style.background=colorToCssSafe($("fillColor").value);}
+  function colorToCssSafe(v){try{return colorToCss(v)}catch(e){return "linear-gradient(135deg,#c9ad70,#555)"}}
+  function deleteVariable(name){
+    const users=Object.entries(state.variables).filter(([n,v])=>n!==name&&new RegExp(`\\b${name.replace(/[.*+?^${}()|[\]\\]/g,"\\$&")}\\b`).test(v.expression));
+    const pointUsers=state.points.filter(p=>[p.xExpression,p.yExpression].some(x=>new RegExp(`\\b${name}\\b`).test(x)));
+    if(users.length||pointUsers.length){toast("Variable wird noch verwendet. Erst abhängige Formeln oder Punkte ändern.");return;}
+    delete state.variables[name];renderVariables();draw();toast("Variable gelöscht.");
+  }
+  function addVariable(){
+    const name=$("varName").value.trim(),expression=$("varExpression").value.trim();
+    if(!/^[A-Za-z_][A-Za-z0-9_]*$/.test(name))throw Error("Name muss mit Buchstabe oder Unterstrich beginnen");
+    if(!(name in state.variables)&&Object.keys(state.variables).length>=100)throw Error("Maximal 100 Variablen erlaubt");
+    if(!expression)throw Error("Wert oder Formel fehlt");
+    const previous=state.variables[name];state.variables[name]={expression};
+    try{resolve(name);for(const n of Object.keys(state.variables))resolve(n);}catch(e){if(previous)state.variables[name]=previous;else delete state.variables[name];throw e;}
+    $("varName").value="";$("varExpression").value="";refresh();toast("Variable "+name+" gespeichert.");
+  }
+  function addPoint(name,xExpression,yExpression){
+    if(!name||! /^[A-Za-z_][A-Za-z0-9_]*$/.test(name))throw Error("Punktname muss mit Buchstabe oder Unterstrich beginnen");
+    if(state.points.some(p=>p.name===name))throw Error("Punktname existiert bereits");
+    const x=validateCoordinate(resolve(xExpression)),y=validateCoordinate(resolve(yExpression));
+    const p={id:state.nextId++,name,type:"Punkt",xExpression:String(xExpression).trim(),yExpression:String(yExpression).trim()};
+    state.points.push(p);return p;
+  }
+  function addLine(startName,endName,name){
+    if(startName===endName)throw Error("Start- und Endpunkt müssen verschieden sein");
+    getPoint(startName);getPoint(endName);const line={id:state.nextId++,name:name||`Linie ${state.lines.length+1}`,type:"Linie",startName,endName,color:rgbaHex($("lineColor").value)};state.lines.push(line);return line;
+  }
+  function addPolygon(name,names,fill,stroke){
+    const pointNames=names.map(x=>x.trim()).filter(Boolean);
+    if(pointNames.length>1&&pointNames[0]===pointNames[pointNames.length-1])pointNames.pop();
+    if(new Set(pointNames).size<3)throw Error("Eine Fläche benötigt mindestens drei unterschiedliche Punkte");
+    pointNames.forEach(getPoint);colorToCss(fill);colorToCss(stroke);
+    const poly={id:state.nextId++,name:name||`Fläche ${state.polygons.length+1}`,type:"Fläche",pointNames,fill:rgbaHex(fill),stroke:rgbaHex(stroke)};state.polygons.push(poly);return poly;
+  }
+  function deleteObject(id){const obj=objectById(id);if(!obj)return;if(obj.type==="Punkt"){if(state.lines.some(l=>l.startName===obj.name||l.endName===obj.name)||state.polygons.some(p=>p.pointNames.includes(obj.name))){toast("Punkt wird von einer Linie oder Fläche verwendet.");return;}state.points=state.points.filter(p=>p.id!==id);}else if(obj.type==="Linie")state.lines=state.lines.filter(o=>o.id!==id);else state.polygons=state.polygons.filter(o=>o.id!==id);if(state.selected===id)state.selected=null;refresh();}
+  function downloadBlob(blob,filename){const url=URL.createObjectURL(blob),a=document.createElement("a");a.href=url;a.download=filename;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),1500);}
+  function exportImage(){const exportCanvas=document.createElement("canvas");exportCanvas.width=1000;exportCanvas.height=1000;const old=state.zoom;state.zoom=100;const previous=canvas.width;draw();exportCanvas.getContext("2d").drawImage(canvas,0,0,1000,1000);state.zoom=old;canvas.width=previous;draw();exportCanvas.toBlob(blob=>{if(!blob){toast("PNG-Export fehlgeschlagen.");return;}downloadBlob(blob,"ArtistGPT-"+new Date().toISOString().slice(0,10)+".png");toast("PNG wurde heruntergeladen.");},"image/png");}
+  function exportProject(){const project={format:"ArtistGPT-project-v1",createdAt:new Date().toISOString(),variables:state.variables,points:state.points,lines:state.lines,polygons:state.polygons,nextId:state.nextId};downloadBlob(new Blob([JSON.stringify(project,null,2)],{type:"application/json"}),"ArtistGPT-project.json");toast("Projektdatei exportiert.");}
+  function importProject(file){const reader=new FileReader();reader.onload=()=>{try{const p=JSON.parse(reader.result);if(p.format!=="ArtistGPT-project-v1")throw Error("Unbekanntes Projektformat");if(Object.keys(p.variables||{}).length>100)throw Error("Projekt enthält mehr als 100 Variablen");state.variables=p.variables||{};state.points=p.points||[];state.lines=p.lines||[];state.polygons=p.polygons||[];state.nextId=p.nextId||1;Object.keys(state.variables).forEach(n=>resolve(n));refresh();toast("Projekt geladen.");}catch(e){toast("Importfehler: "+e.message);}};reader.readAsText(file);}
+  function canvasCoords(event){const r=canvas.getBoundingClientRect();return {x:Math.max(0,Math.min(1000,(event.clientX-r.left)/r.width*1000)),y:Math.max(0,Math.min(1000,(event.clientY-r.top)/r.height*1000))};}
+  canvas.addEventListener("pointermove",e=>{const p=canvasCoords(e);$("coordReadout").textContent=`x: ${p.x.toFixed(1)} · y: ${p.y.toFixed(1)}`;});
+  canvas.addEventListener("click",e=>{try{const p=canvasCoords(e);if(state.tool==="point"){let name="P"+(state.points.length+1);while(state.points.some(x=>x.name===name))name="P"+(Number(name.slice(1))+1);addPoint(name,String(Number(p.x.toFixed(2))),String(Number(p.y.toFixed(2))));refresh();toast(name+" erstellt.");}else if(state.tool==="line"){const hit=nearestPoint(p);if(!hit)throw Error("Für eine Linie einen vorhandenen Punkt anklicken.");if(!state.pendingLine){state.pendingLine=hit.name;toast("Startpunkt "+hit.name+" gewählt. Jetzt Endpunkt anklicken.");}else{addLine(state.pendingLine,hit.name);state.pendingLine=null;refresh();toast("Linie erstellt.");}}else if(state.tool==="polygon"){const hit=nearestPoint(p);if(!hit)throw Error("Für eine Fläche vorhandene Punkte anklicken.");state.pendingPolygon=state.pendingPolygon||[];state.pendingPolygon.push(hit.name);$("polygonPoints").value=state.pendingPolygon.join(", ");if(state.pendingPolygon.length>=3)toast("Punkte gesammelt. Über „Geschlossene Fläche erstellen“ abschließen.");}else{const hit=nearestObject(p);state.selected=hit?hit.id:null;draw();}}catch(err){toast(err.message);}});
+  function nearestPoint(p){return state.points.map(o=>{const v=pointValue(o);return {o,d:Math.hypot(v.x-p.x,v.y-p.y)}}).filter(x=>x.d<Math.max(15,30/state.zoom*60)).sort((a,b)=>a.d-b.d)[0]?.o;}
+  function nearestObject(p){for(const poly of [...state.polygons].reverse()){const pts=poly.pointNames.map(n=>pointValue(getPoint(n)));let inside=false;for(let i=0,j=pts.length-1;i<pts.length;j=i++){const a=pts[i],b=pts[j];if(((a.y>p.y)!==(b.y>p.y))&&(p.x<(b.x-a.x)*(p.y-a.y)/(b.y-a.y)+a.x))inside=!inside;}if(inside)return poly;}return nearestPoint(p);}
+  document.querySelectorAll("[data-tool]").forEach(b=>b.addEventListener("click",()=>{state.tool=b.dataset.tool;document.querySelectorAll("[data-tool]").forEach(x=>x.classList.toggle("active",x===b));$("canvasHint").textContent=state.tool==="point"?"Auf die Leinwand tippen, um einen Punkt zu setzen.":state.tool==="line"?"Zwei vorhandene Punkte nacheinander anklicken.":state.tool==="polygon"?"Mindestens drei vorhandene Punkte anklicken und Fläche erstellen.":"Objekt anklicken, um es auszuwählen.";state.pendingLine=null;if(state.tool!=="polygon")state.pendingPolygon=[];}));
+  $("addVariableBtn").onclick=()=>{try{addVariable()}catch(e){toast(e.message)}};
+  $("varExpression").addEventListener("keydown",e=>{if(e.key==="Enter")$("addVariableBtn").click();});
+  $("createPointBtn").onclick=()=>{try{addPoint($("pointName").value.trim()||`P${state.points.length+1}`,$("pointX").value,$("pointY").value);refresh();toast("Punkt erstellt.");}catch(e){toast(e.message)}};
+  $("createLineBtn").onclick=()=>{try{if(state.points.length<2)throw Error("Mindestens zwei Punkte werden benötigt");addLine(state.points[state.points.length-2].name,state.points[state.points.length-1].name);refresh();toast("Linie erstellt.");}catch(e){toast(e.message)}};
+  $("createPolygonBtn").onclick=()=>{try{addPolygon($("polygonName").value,$("polygonPoints").value.split(","),$("fillColor").value,$("lineColor").value);state.pendingPolygon=[];refresh();toast("Fläche erstellt.");}catch(e){toast(e.message)}};
+  $("applyColorBtn").onclick=()=>{try{const obj=objectById(state.selected);if(!obj||obj.type!=="Fläche")throw Error("Zuerst eine Fläche auswählen");colorToCss($("fillColor").value);obj.fill=rgbaHex($("fillColor").value);obj.stroke=rgbaHex($("lineColor").value);refresh();toast("Farbe aktualisiert.");}catch(e){toast(e.message)}};
+  $("fillColor").addEventListener("input",()=>{$("colorPreview").style.background=colorToCssSafe($("fillColor").value)});
+  $("zoom").addEventListener("input",e=>{state.zoom=Number(e.target.value);$("zoomLabel").textContent=state.zoom+" %";draw();});
+  $("downloadBtn").onclick=exportImage;$("saveProjectBtn").onclick=exportProject;
+  $("serverToggle").addEventListener("change",async e=>{state.serverActive=e.target.checked;if(!state.serverActive){$("serverStatus").textContent="Server deaktiviert";$("statusDot").classList.remove("on");$("bridgeMessage").textContent="Serversteuerung ausgeschaltet. Bei einer installierten Bridge wird der MCP-Endpunkt deaktiviert.";return;}await checkBridge();});
+  async function checkBridge(){
+    if(!$("serverToggle").checked){$("serverStatus").textContent="Server deaktiviert";$("statusDot").classList.remove("on");return;}
+    const endpoint=$("mcpEndpoint").value.trim();let base=endpoint.replace(/\/mcp\/?$/,"");
+    try{const response=await fetch(base+"/health",{method:"GET",mode:"cors",cache:"no-store"});if(!response.ok)throw Error("HTTP "+response.status);const data=await response.json();$("serverStatus").textContent="MCP-Bridge erreichbar";$("statusDot").classList.add("on");$("bridgeMessage").textContent="Bridge erreichbar. Status: "+JSON.stringify(data);toast("Bridge erreichbar.");}
+    catch(e){$("serverStatus").textContent="MCP-Bridge nicht verbunden";$("statusDot").classList.remove("on");$("bridgeMessage").textContent="Keine Bridge unter "+base+"/health erreichbar. Die Zeichenfunktionen funktionieren weiterhin lokal. Ein Schalter in einer HTML-Datei kann selbst keinen Serverprozess starten.";toast("MCP-Bridge nicht erreichbar.");}
+  }
+  $("checkBridgeBtn").onclick=checkBridge;
+  $("copyEndpointBtn").onclick=async()=>{try{await navigator.clipboard.writeText($("mcpEndpoint").value);toast("MCP-Adresse kopiert.");}catch(e){$("mcpEndpoint").select();toast("Adresse markieren und kopieren.");}};
+  // Seed a minimal example so the blank canvas is immediately explorable.
+  state.variables.a={expression:"3"};state.variables.b={expression:"5.2"};state.variables.c={expression:"a+b"};
+  addPoint("P1","c","a");addPoint("P2","a","b");addLine("P1","P2","L1");
+  $("fillColor").value="#C9AD7080";refresh();checkBridge();
+  window.ArtistGPT = {
+    getState:()=>JSON.parse(JSON.stringify(state)),
+    applyAction(action){try{
+      switch(action.tool){
+        case "get_sandbox_status": return {variables:Object.keys(state.variables).length,points:state.points.length,lines:state.lines.length,polygons:state.polygons.length,serverActive:state.serverActive};
+        case "list_variables": return Object.fromEntries(Object.keys(state.variables).map(k=>[k,{expression:state.variables[k].expression,value:resolve(k)}]));
+        case "create_variable": addVariableFromTool(action.name,action.expression);break;
+        case "update_variable": addVariableFromTool(action.name,action.expression);break;
+        case "create_point": addPoint(action.name,action.x,action.y);break;
+        case "create_line": addLine(action.startName,action.endName,action.name);break;
+        case "create_polygon": addPolygon(action.name,action.pointNames,action.fill||$("fillColor").value,action.stroke||$("lineColor").value);break;
+        case "export_image": exportImage();return {ok:true,method:"browser-download"};
+        default: throw Error("Unbekanntes Tool: "+action.tool);
+      }refresh();return {ok:true,state:window.ArtistGPT.getState()};
+    }catch(e){return {ok:false,error:e.message};}}
+  };
+  function addVariableFromTool(name,expression){if(!(name in state.variables)&&Object.keys(state.variables).length>=100)throw Error("Maximal 100 Variablen erlaubt");const old=state.variables[name];state.variables[name]={expression:String(expression)};try{resolve(name);Object.keys(state.variables).forEach(n=>resolve(n));}catch(e){if(old)state.variables[name]=old;else delete state.variables[name];throw e;}}
+})();
+</script>
+</body>
+</html>
